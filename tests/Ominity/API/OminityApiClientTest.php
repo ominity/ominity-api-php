@@ -67,7 +67,7 @@ class OminityApiClientTest extends \PHPUnit\Framework\TestCase
             "field": "recurringType",
             "_links": {
                 "documentation": {
-                    "href": "https://docs.mollie.com/guides/handling-errors",
+                    "href": "https://docs.ominity.com/guides/handling-errors",
                     "type": "text/html"
                 }
             }
@@ -82,7 +82,7 @@ class OminityApiClientTest extends \PHPUnit\Framework\TestCase
             $parsedResponse = $this->apiClient->performHttpCall('GET', '');
         } catch (ApiException $e) {
             $this->assertEquals('recurringType', $e->getField());
-            $this->assertEquals('https://docs.mollie.com/guides/handling-errors', $e->getDocumentationUrl());
+            $this->assertEquals('https://docs.ominity.com/guides/handling-errors', $e->getDocumentationUrl());
             $this->assertEquals($response, $e->getResponse());
 
             throw $e;
@@ -119,7 +119,7 @@ class OminityApiClientTest extends \PHPUnit\Framework\TestCase
 
     public function testCanBeSerializedAndUnserialized()
     {
-        $this->apiClient->setApiEndpoint("https://mymollieproxy.local");
+        $this->apiClient->setApiEndpoint("https://myominityproxy.local");
         $serialized = \serialize($this->apiClient);
 
         $this->assertStringNotContainsString('test_foobarfoobarfoobarfoobarfoobar', $serialized, "API key should not be in serialized data or it will end up in caches.");
@@ -130,7 +130,7 @@ class OminityApiClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($client_copy->apiKey, "API key should not have been remembered");
         $this->assertInstanceOf(Guzzle6And7HttpAdapter::class, $client_copy->httpClient, "A Guzzle client should have been set.");
         $this->assertNull($client_copy->usesOAuth());
-        $this->assertEquals("https://mymollieproxy.local", $client_copy->getApiEndpoint(), "The API endpoint should be remembered");
+        $this->assertEquals("https://myominityproxy.local", $client_copy->getApiEndpoint(), "The API endpoint should be remembered");
 
         $this->assertNotEmpty($client_copy->customerPayments);
         $this->assertNotEmpty($client_copy->payments);

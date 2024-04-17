@@ -44,7 +44,7 @@ $ominity->enableDebugging();
 
 try {
     $ominity->products->get(1);
-} catch (\Mollie\Api\Exceptions\ApiException $exception) {
+} catch (\Ominity\Api\Exceptions\ApiException $exception) {
     $request = $exception->getRequest();
 }
 ```
@@ -54,7 +54,7 @@ If you are recording instances of `ApiException`, the request details will be in
 To disable debugging again:
 
 ```php
-/** @var $mollie \Ominity\Api\OminityApiClient */
+/** @var $ominity \Ominity\Api\OminityApiClient */
 $ominity->disableDebugging();
 ```
 
