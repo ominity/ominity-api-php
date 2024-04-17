@@ -1,0 +1,458 @@
+<?php
+
+namespace Ominity\Api;
+
+use Ominity\Api\Endpoints\ComponentEndpoint;
+use Ominity\Api\Endpoints\PageEndpoint;
+use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
+use Ominity\Api\Exceptions\IncompatiblePlatform;
+use Ominity\Api\HttpAdapter\HttpAdapterPicker;
+use Ominity\Api\Idempotency\DefaultIdempotencyKeyGenerator;
+
+class OminityApiClient
+{
+    /**
+     * Version of our client.
+     */
+    public const CLIENT_VERSION = "1.0.0";
+
+    /**
+     * Endpoint of the remote API.
+     */
+    public const API_ENDPOINT = "https://api.ominity.com";
+
+    /**
+     * Version of the remote API.
+     */
+    public const API_VERSION = "v1";
+
+    /**
+     * HTTP Methods
+     */
+    public const HTTP_GET = "GET";
+    public const HTTP_POST = "POST";
+    public const HTTP_DELETE = "DELETE";
+    public const HTTP_PATCH = "PATCH";
+
+    /**
+     * @var \Ominity\Api\HttpAdapter\HttpAdapterInterface
+     */
+    protected $httpClient;
+
+    /**
+     * @var string
+     */
+    protected $apiEndpoint = self::API_ENDPOINT;
+
+    /**
+     * RESTful Component resource.
+     *
+     * @var ComponentEndpoint
+     */
+    public $components;
+
+    /**
+     * RESTful Page resource.
+     *
+     * @var PageEndpoint
+     */
+    public $pages;
+    
+    /**
+     * @var string
+     */
+    protected $apiKey;
+
+    /**
+     * True if an OAuth access token is set as API key.
+     *
+     * @var bool
+     */
+    protected $oauthAccess;
+
+    /**
+     * A unique string ensuring a request to a mutating API endpoint is processed only once.
+     * This key resets to null after each request.
+     *
+     * @var string|null
+     */
+    protected $idempotencyKey = null;
+
+    /**
+     * @var \Ominity\Api\Idempotency\IdempotencyKeyGeneratorContract|null
+     */
+    protected $idempotencyKeyGenerator;
+
+    /**
+     * @var array
+     */
+    protected $versionStrings = [];
+
+    /**
+     * @param \GuzzleHttp\ClientInterface|\Ominity\Api\HttpAdapter\HttpAdapterInterface|null $httpClient
+     * @param \Ominity\Api\HttpAdapter\HttpAdapterPickerInterface|null $httpAdapterPicker,
+     * @param \Ominity\Api\Idempotency\IdempotencyKeyGeneratorContract $idempotencyKeyGenerator,
+     * @throws \Ominity\Api\Exceptions\IncompatiblePlatform|\Ominity\Api\Exceptions\UnrecognizedClientException
+     */
+    public function __construct($httpClient = null, $httpAdapterPicker = null, $idempotencyKeyGenerator = null)
+    {
+        $httpAdapterPicker = $httpAdapterPicker ?: new HttpAdapterPicker;
+        $this->httpClient = $httpAdapterPicker->pickHttpAdapter($httpClient);
+
+        $compatibilityChecker = new CompatibilityChecker;
+        $compatibilityChecker->checkCompatibility();
+
+        $this->initializeEndpoints();
+        $this->initializeVersionStrings();
+        $this->initializeIdempotencyKeyGenerator($idempotencyKeyGenerator);
+    }
+
+    public function initializeEndpoints()
+    {
+        $this->components = new ComponentEndpoint($this);
+        $this->pages = new PageEndpoint($this);
+    }
+
+    protected function initializeVersionStrings()
+    {
+        $this->addVersionString("Ominity/" . self::CLIENT_VERSION);
+        $this->addVersionString("PHP/" . phpversion());
+
+        $httpClientVersionString = $this->httpClient->versionString();
+        if ($httpClientVersionString) {
+            $this->addVersionString($httpClientVersionString);
+        }
+    }
+
+    /**
+     * @param \Ominity\Api\Idempotency\IdempotencyKeyGeneratorContract $generator
+     * @return void
+     */
+    protected function initializeIdempotencyKeyGenerator($generator)
+    {
+        $this->idempotencyKeyGenerator = $generator ? $generator : new DefaultIdempotencyKeyGenerator;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return OminityApiClient
+     */
+    public function setApiEndpoint($url)
+    {
+        $this->apiEndpoint = rtrim(trim($url), '/');
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiEndpoint()
+    {
+        return $this->apiEndpoint;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVersionStrings()
+    {
+        return $this->versionStrings;
+    }
+
+    /**
+     * TODO: fix regex
+     * @param string $apiKey The API key, starting with 'test_' or 'live_'
+     *
+     * @return OminityApiClient
+     * @throws ApiException
+     */
+    public function setApiKey($apiKey)
+    {
+        $apiKey = trim($apiKey);
+
+        if (! preg_match('/^(live|test)_\w{30,}$/', $apiKey)) {
+            throw new ApiException("Invalid API key: '{$apiKey}'. An API key must start with 'test_' or 'live_' and must be at least 30 characters long.");
+        }
+
+        $this->apiKey = $apiKey;
+        $this->oauthAccess = false;
+
+        return $this;
+    }
+
+    /**
+     * @param string $accessToken OAuth access token, starting with 'access_'
+     *
+     * @return OminityApiClient
+     * @throws ApiException
+     */
+    public function setAccessToken($accessToken)
+    {
+        $accessToken = trim($accessToken);
+
+        if (! preg_match('/^access_\w+$/', $accessToken)) {
+            throw new ApiException("Invalid OAuth access token: '{$accessToken}'. An access token must start with 'access_'.");
+        }
+
+        $this->apiKey = $accessToken;
+        $this->oauthAccess = true;
+
+        return $this;
+    }
+
+    /**
+     * Returns null if no API key has been set yet.
+     *
+     * @return bool|null
+     */
+    public function usesOAuth()
+    {
+        return $this->oauthAccess;
+    }
+
+    /**
+     * @param string $versionString
+     *
+     * @return OminityApiClient
+     */
+    public function addVersionString($versionString)
+    {
+        $this->versionStrings[] = str_replace([" ", "\t", "\n", "\r"], '-', $versionString);
+
+        return $this;
+    }
+
+    /**
+     * Enable debugging mode. If debugging mode is enabled, the attempted request will be included in the ApiException.
+     * By default, debugging is disabled to prevent leaking sensitive request data into exception logs.
+     *
+     * @throws \Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException
+     */
+    public function enableDebugging()
+    {
+        if (
+            ! method_exists($this->httpClient, 'supportsDebugging')
+            || ! $this->httpClient->supportsDebugging()
+        ) {
+            throw new HttpAdapterDoesNotSupportDebuggingException(
+                "Debugging is not supported by " . get_class($this->httpClient) . "."
+            );
+        }
+
+        $this->httpClient->enableDebugging();
+    }
+
+    /**
+     * Disable debugging mode. If debugging mode is enabled, the attempted request will be included in the ApiException.
+     * By default, debugging is disabled to prevent leaking sensitive request data into exception logs.
+     *
+     * @throws \Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException
+     */
+    public function disableDebugging()
+    {
+        if (
+            ! method_exists($this->httpClient, 'supportsDebugging')
+            || ! $this->httpClient->supportsDebugging()
+        ) {
+            throw new HttpAdapterDoesNotSupportDebuggingException(
+                "Debugging is not supported by " . get_class($this->httpClient) . "."
+            );
+        }
+
+        $this->httpClient->disableDebugging();
+    }
+
+    /**
+     * Set the idempotency key used on the next request. The idempotency key is a unique string ensuring a request to a
+     * mutating API endpoint is processed only once. The idempotency key resets to null after each request. Using
+     * the setIdempotencyKey method supersedes the IdempotencyKeyGenerator.
+     *
+     * @param $key
+     * @return $this
+     */
+    public function setIdempotencyKey($key)
+    {
+        $this->idempotencyKey = $key;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the idempotency key. The idempotency key is a unique string ensuring a request to a
+     * mutating API endpoint is processed only once. Note that the idempotency key gets reset to null after each
+     * request.
+     *
+     * @return string|null
+     */
+    public function getIdempotencyKey()
+    {
+        return $this->idempotencyKey;
+    }
+
+    /**
+     * Reset the idempotency key. Note that the idempotency key automatically resets to null after each request.
+     * @return $this
+     */
+    public function resetIdempotencyKey()
+    {
+        $this->idempotencyKey = null;
+
+        return $this;
+    }
+
+    /**
+     * @param \Ominity\Api\Idempotency\IdempotencyKeyGeneratorContract $generator
+     * @return \Ominity\Api\OminityApiClient
+     */
+    public function setIdempotencyKeyGenerator($generator)
+    {
+        $this->idempotencyKeyGenerator = $generator;
+
+        return $this;
+    }
+
+    /**
+     * @return \Ominity\Api\OminityApiClient
+     */
+    public function clearIdempotencyKeyGenerator()
+    {
+        $this->idempotencyKeyGenerator = null;
+
+        return $this;
+    }
+
+    /**
+     * Perform a http call. This method is used by the resource specific classes. Please use the $payments property to
+     * perform operations on payments.
+     *
+     * @param string $httpMethod
+     * @param string $apiMethod
+     * @param string|null $httpBody
+     *
+     * @return \stdClass
+     * @throws ApiException
+     *
+     * @codeCoverageIgnore
+     */
+    public function performHttpCall($httpMethod, $apiMethod, $httpBody = null)
+    {
+        $url = $this->apiEndpoint . "/" . self::API_VERSION . "/" . $apiMethod;
+
+        return $this->performHttpCallToFullUrl($httpMethod, $url, $httpBody);
+    }
+
+    /**
+     * Perform a http call to a full url. This method is used by the resource specific classes.
+     *
+     * @see $payments
+     * @see $isuers
+     *
+     * @param string $httpMethod
+     * @param string $url
+     * @param string|null $httpBody
+     *
+     * @return \stdClass|null
+     * @throws ApiException
+     *
+     * @codeCoverageIgnore
+     */
+    public function performHttpCallToFullUrl($httpMethod, $url, $httpBody = null)
+    {
+        if (empty($this->apiKey)) {
+            throw new ApiException("You have not set an API key or OAuth access token. Please use setApiKey() to set the API key.");
+        }
+
+        $userAgent = implode(' ', $this->versionStrings);
+
+        if ($this->usesOAuth()) {
+            $userAgent .= " OAuth/2.0";
+        }
+
+        $headers = [
+            'Accept' => "application/json",
+            'Authorization' => "Bearer {$this->apiKey}",
+            'User-Agent' => $userAgent,
+        ];
+
+        if ($httpBody !== null) {
+            $headers['Content-Type'] = "application/json";
+        }
+
+        if (function_exists("php_uname")) {
+            $headers['X-Ominity-Client-Info'] = php_uname();
+        }
+
+        $headers = $this->applyIdempotencyKey($headers, $httpMethod);
+
+        $response = $this->httpClient->send($httpMethod, $url, $headers, $httpBody);
+
+        $this->resetIdempotencyKey();
+
+        return $response;
+    }
+
+    /**
+     * Conditionally apply the idempotency key to the request headers
+     *
+     * @param array $headers
+     * @param string $httpMethod
+     * @return array
+     */
+    private function applyIdempotencyKey(array $headers, string $httpMethod)
+    {
+        if (! in_array($httpMethod, [self::HTTP_POST, self::HTTP_PATCH, self::HTTP_DELETE])) {
+            unset($headers['Idempotency-Key']);
+
+            return $headers;
+        }
+
+        if ($this->idempotencyKey) {
+            $headers['Idempotency-Key'] = $this->idempotencyKey;
+
+            return $headers;
+        }
+
+        if ($this->idempotencyKeyGenerator) {
+            $headers['Idempotency-Key'] = $this->idempotencyKeyGenerator->generate();
+
+            return $headers;
+        }
+
+        unset($headers['Idempotency-Key']);
+
+        return $headers;
+    }
+
+    /**
+     * Serialization can be used for caching. Of course doing so can be dangerous but some like to live dangerously.
+     *
+     * \serialize() should be called on the collections or object you want to cache.
+     *
+     * We don't need any property that can be set by the constructor, only properties that are set by setters.
+     *
+     * Note that the API key is not serialized, so you need to set the key again after unserializing if you want to do
+     * more API calls.
+     *
+     * @deprecated
+     * @return string[]
+     */
+    public function __sleep()
+    {
+        return ["apiEndpoint"];
+    }
+
+    /**
+     * When unserializing a collection or a resource, this class should restore itself.
+     *
+     * Note that if you have set an HttpAdapter, this adapter is lost on wakeup and reset to the default one.
+     *
+     * @throws IncompatiblePlatform If suddenly unserialized on an incompatible platform.
+     */
+    public function __wakeup()
+    {
+        $this->__construct();
+    }
+}

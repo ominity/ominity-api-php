@@ -1,0 +1,44 @@
+{
+    "name": "ominity/ominity-api-php",
+    "description": "Ominity API library for PHP.",
+    "homepage": "https://www.ominity.com/",
+    "license": "BSD-2-Clause",
+    "autoload": {
+        "psr-4": {
+            "Ominity\\Api\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Tests\\Ominity\\Api\\": "tests/Ominity/API/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ominity",
+            "email": "info@ominity.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2|^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "composer/ca-bundle": "^1.2"
+    },
+    "require-dev": {
+        "eloquent/liberator": "^2.0||^3.0",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "guzzlehttp/guzzle": "^6.3 || ^7.0",
+        "phpstan/phpstan": "^1.4",
+        "phpunit/phpunit": "^8.5 || ^9.5"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit tests",
+        "format": "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    }
+}

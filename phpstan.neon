@@ -1,0 +1,17 @@
+parameters:
+    level: 5
+    paths:
+        - %currentWorkingDirectory%/src
+        - %currentWorkingDirectory%/tests
+        - %currentWorkingDirectory%/examples
+    excludePaths:
+        - %currentWorkingDirectory%/vendor
+    ignoreErrors:
+            - '#Access to an undefined property Eloquent\\Liberator\\LiberatorProxyInterface::\$request#'
+            - '#Access to protected property Ominity\\Api\\OminityApiClient::\$apiKey#'
+            - '#Access to protected property Ominity\\Api\\OminityApiClient::\$httpClient#'
+            - '#Call to an undefined method Ominity\\Api\\HttpAdapter\\HttpAdapterInterface::enableDebugging\(\)#'
+            - '#Call to an undefined method Ominity\\Api\\HttpAdapter\\HttpAdapterInterface::disableDebugging\(\)#'
+    treatPhpDocTypesAsCertain: false
+includes:
+    - phpstan-baseline.neon
