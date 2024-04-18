@@ -1,15 +1,17 @@
 <?php
 
-namespace Ominity\Api\Resources;
+namespace Ominity\Api\Resources\Cms;
 
-class RouteCollection extends PaginatedCollection
+use Ominity\Api\Resources\PaginatedCollection;
+
+class LayoutCollection extends PaginatedCollection
 {
     /**
      * @return string
      */
     public function getCollectionResourceName()
     {
-        return "route";
+        return "layouts";
     }
 
     /**
@@ -17,6 +19,6 @@ class RouteCollection extends PaginatedCollection
      */
     protected function createResourceObject()
     {
-        return new Route($this->client);
+        return new Layout($this->client);
     }
 }

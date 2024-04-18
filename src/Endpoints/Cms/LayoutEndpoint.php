@@ -1,15 +1,16 @@
 <?php
 
-namespace Ominity\Api\Endpoints;
+namespace Ominity\Api\Endpoints\Cms;
 
+use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\Resources\Component;
-use Ominity\Api\Resources\ComponentCollection;
+use Ominity\Api\Resources\Cms\Layout;
+use Ominity\Api\Resources\Cms\LayoutCollection;
 use Ominity\Api\Resources\LazyCollection;
 
-class ComponentEndpoint extends CollectionEndpointAbstract
+class LayoutEndpoint extends CollectionEndpointAbstract
 {
-    protected $resourcePath = "cms/components";
+    protected $resourcePath = "cms/layouts";
 
     /**
      * Get the object that is used by this API. Every API uses one type of object.
@@ -18,7 +19,7 @@ class ComponentEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceObject()
     {
-        return new Component($this->client);
+        return new Layout($this->client);
     }
 
     /**
@@ -31,18 +32,18 @@ class ComponentEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new ComponentCollection($this->client, $count, $_links);
+        return new LayoutCollection($this->client, $count, $_links);
     }
 
     /**
-     * Retrieve an Component from the API.
+     * Retrieve an Layout from the API.
      *
      * Will throw a ApiException if the invoice id is invalid or the resource cannot be found.
      *
      * @param string $pageId
      * @param array $parameters
      *
-     * @return Component
+     * @return Layout
      * @throws ApiException
      */
     public function get($pageId, array $parameters = [])
@@ -51,13 +52,13 @@ class ComponentEndpoint extends CollectionEndpointAbstract
     }
 
     /**
-     * Retrieves a collection of Components from the API.
+     * Retrieves a collection of Layouts from the API.
      *
-     * @param string $page The first invoice ID you want to include in your list.
+     * @param string $page The page number to request
      * @param int $limit
      * @param array $parameters
      *
-     * @return ComponentCollection
+     * @return LayoutCollection
      * @throws ApiException
      */
     public function page($page = null, $limit = null, array $parameters = [])
@@ -79,9 +80,9 @@ class ComponentEndpoint extends CollectionEndpointAbstract
     }
 
     /**
-     * Create an iterator for iterating over components retrieved from the API.
+     * Create an iterator for iterating over pages retrieved from the API.
      *
-     * @param string $page The first resource ID you want to include in your list.
+     * @param string $page The page number to request
      * @param int $limit
      * @param array $parameters
      * @param bool $iterateBackwards Set to true for reverse order iteration (default is false).

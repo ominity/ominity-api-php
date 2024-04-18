@@ -1,6 +1,9 @@
 <?php
 
-namespace Ominity\Api\Resources;
+namespace Ominity\Api\Resources\Cms;
+
+use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\ResourceFactory;
 
 class Component extends BaseResource
 {
@@ -12,28 +15,35 @@ class Component extends BaseResource
     public $resource;
 
     /**
-     * Id of the field.
+     * Id of the component.
      *
      * @var int
      */
     public $id;
 
     /**
-     * Name of the field.
+     * Name of the component.
      *
      * @var string
      */
     public $name;
 
     /**
-     * The component fields are the configurable fields for a component.
+     * Icon of the component.
+     *
+     * @var string
+     */
+    public $icon;
+
+    /**
+     * The component fields.
      *
      * @var array|object[]
      */
     public $fields;
 
     /** 
-     * UTC datetime the page was last updated in ISO-8601 format.
+     * UTC datetime the component was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -41,7 +51,7 @@ class Component extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the page was created in ISO-8601 format.
+     * UTC datetime the component was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string

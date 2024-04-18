@@ -2,6 +2,7 @@
 
 namespace Ominity\Api;
 
+use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
 use Ominity\Api\Endpoints\ComponentEndpoint;
 use Ominity\Api\Endpoints\PageEndpoint;
 use Ominity\Api\Exceptions\ApiException;
@@ -46,18 +47,11 @@ class OminityApiClient
     protected $apiEndpoint = self::API_ENDPOINT;
 
     /**
-     * RESTful Component resource.
+     * RESTful CMS endppoints.
      *
-     * @var ComponentEndpoint
+     * @var CmsEndpointCollection
      */
-    public $components;
-
-    /**
-     * RESTful Page resource.
-     *
-     * @var PageEndpoint
-     */
-    public $pages;
+    public $cms;
     
     /**
      * @var string
@@ -110,8 +104,7 @@ class OminityApiClient
 
     public function initializeEndpoints()
     {
-        $this->components = new ComponentEndpoint($this);
-        $this->pages = new PageEndpoint($this);
+        $this->cms = new CmsEndpointCollection($this);
     }
 
     protected function initializeVersionStrings()

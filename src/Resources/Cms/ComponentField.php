@@ -1,6 +1,8 @@
 <?php
 
-namespace Ominity\Api\Resources;
+namespace Ominity\Api\Resources\Cms;
+
+use Ominity\Api\Resources\BaseResource;
 
 class ComponentField extends BaseResource
 {

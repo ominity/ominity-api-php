@@ -1,12 +1,12 @@
 <?php
 
-namespace Ominity\Api\Endpoints;
+namespace Ominity\Api\Endpoints\Cms;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\Resources\Cms\Page;
+use Ominity\Api\Resources\Cms\PageCollection;
 use Ominity\Api\Resources\LazyCollection;
-use Ominity\Api\Resources\Page;
-use Ominity\Api\Resources\PageCollection;
 
 class PageEndpoint extends CollectionEndpointAbstract
 {

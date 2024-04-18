@@ -1,6 +1,8 @@
 <?php
 
-namespace Ominity\Api\Resources;
+namespace Ominity\Api\Resources\Cms;
+
+use Ominity\Api\Resources\BaseResource;
 
 class Page extends BaseResource
 {
@@ -88,5 +90,10 @@ class Page extends BaseResource
         $currentTimestamp = time();
 
         return $publishedTimestamp <= $currentTimestamp;
+    }
+
+    public function components() 
+    {
+        return null;
     }
 }
