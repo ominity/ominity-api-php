@@ -15,7 +15,7 @@ abstract class BaseResource
     /**
      * Indicates the type of resource.
      *
-     * @example payment
+     * @example product
      *
      * @var string
      */

@@ -11,7 +11,7 @@ class PageComponentCollection extends BaseCollection
      */
     public function getCollectionResourceName()
     {
-        return null;
+        return 'page_components';
     }
 
     /**
