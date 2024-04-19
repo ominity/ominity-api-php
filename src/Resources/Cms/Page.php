@@ -3,6 +3,7 @@
 namespace Ominity\Api\Resources\Cms;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\ResourceFactory;
 
 class Page extends BaseResource
 {
@@ -92,8 +93,23 @@ class Page extends BaseResource
         return $publishedTimestamp <= $currentTimestamp;
     }
 
+    /**
+     * @return Layout
+     * @throws ApiException
+     */
+    public function layout() 
+    {
+        return $this->client->cms->layouts->get($this->layoutId);
+    }
+
+     /**
+     * Get all page components for this page
+     *
+     * @return PageComponentCollection
+     * @throws ApiException
+     */
     public function components() 
     {
-        return null;
+        return $this->client->cms->pageComponents->listFor($this);
     }
 }

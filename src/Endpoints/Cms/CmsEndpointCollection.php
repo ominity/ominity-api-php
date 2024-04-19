@@ -27,10 +27,18 @@ class CmsEndpointCollection extends EndpointCollectionAbstract
      */
     public $pages;
 
+    /**
+     * RESTful Page comonent resource.
+     *
+     * @var PageComponentEndpoint
+     */
+    public $pageComponents;
+
     public function initializeEndpoints()
     {
         $this->components = new ComponentEndpoint($this->client);
         $this->layouts = new LayoutEndpoint($this->client);
         $this->pages = new PageEndpoint($this->client);
+        $this->pageComponents = new PageComponentEndpoint($this->client);
     }
 }
