@@ -47,6 +47,13 @@ class Page extends BaseResource
      */
     public $isCached;
 
+    /**
+     * Render friendly page components, only returned if explicit asked in request (include = content).
+     *
+     * @var array|object[]|null
+     */
+    public $content;
+
     /** 
      * UTC datetime the page was published in ISO-8601 format.
      *

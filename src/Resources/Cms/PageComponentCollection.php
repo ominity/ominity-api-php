@@ -21,11 +21,11 @@ class PageComponentCollection extends BaseCollection
      * @param  string $fieldId
      * @return PageComponent|null
      */
-    public function get($fieldId)
+    public function get($pageComponentId)
     {
-        foreach ($this as $field) {
-            if ($field->id === $fieldId) {
-                return $field;
+        foreach ($this as $pageComponent) {
+            if ($pageComponent->id === $pageComponentId) {
+                return $pageComponent;
             }
         }
 
