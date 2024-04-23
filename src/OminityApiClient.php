@@ -3,6 +3,7 @@
 namespace Ominity\Api;
 
 use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
+use Ominity\Api\Endpoints\Settings\SettingsEndpointCollection;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
 use Ominity\Api\Exceptions\IncompatiblePlatform;
@@ -50,6 +51,13 @@ class OminityApiClient
      * @var CmsEndpointCollection
      */
     public $cms;
+
+    /**
+     * RESTful Settings endppoints.
+     *
+     * @var SettingsEndpointCollection
+     */
+    public $settings;
     
     /**
      * @var string
@@ -108,6 +116,7 @@ class OminityApiClient
     public function initializeEndpoints()
     {
         $this->cms = new CmsEndpointCollection($this);
+        $this->settings = new SettingsEndpointCollection($this);
     }
 
     protected function initializeVersionStrings()
