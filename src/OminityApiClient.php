@@ -3,8 +3,6 @@
 namespace Ominity\Api;
 
 use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
-use Ominity\Api\Endpoints\ComponentEndpoint;
-use Ominity\Api\Endpoints\PageEndpoint;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
 use Ominity\Api\Exceptions\IncompatiblePlatform;
@@ -82,6 +80,11 @@ class OminityApiClient
      * @var array
      */
     protected $versionStrings = [];
+
+    /**
+     * @var string|null
+     */
+    protected $language = null; // Language code for Accept-Language header
 
     /**
      * @param \GuzzleHttp\ClientInterface|\Ominity\Api\HttpAdapter\HttpAdapterInterface|null $httpClient
@@ -216,6 +219,29 @@ class OminityApiClient
         $this->versionStrings[] = str_replace([" ", "\t", "\n", "\r"], '-', $versionString);
 
         return $this;
+    }
+
+    /**
+     * Set the language code for Accept-Language header.
+     *
+     * @param string $language The language code to set (e.g., "en-US").
+     * @return OminityApiClient
+     */
+    public function setLanguage($language)
+    {
+        $this->language = trim($language);
+
+        return $this;
+    }
+
+    /**
+     * Get the current language code.
+     *
+     * @return string|null The current language code or null if not set.
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 
     /**
@@ -372,6 +398,10 @@ class OminityApiClient
 
         if ($httpBody !== null) {
             $headers['Content-Type'] = "application/json";
+        }
+
+        if ($this->language) {
+            $headers['Accept-Language'] = $this->language;
         }
 
         if (function_exists("php_uname")) {
