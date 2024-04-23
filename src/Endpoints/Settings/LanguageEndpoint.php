@@ -27,7 +27,7 @@ class LanguageEndpoint extends CollectionEndpointAbstract
      * @param int $count
      * @param \stdClass $_links
      *
-     * @return \Ominity\Api\Resources\BaseCollection
+     * @return LanguageCollection|\Ominity\Api\Resources\BaseCollection
      */
     protected function getResourceCollectionObject($count, $_links)
     {
@@ -39,7 +39,7 @@ class LanguageEndpoint extends CollectionEndpointAbstract
      *
      * @param array $parameters
      *
-     * @return \Ominity\Api\Resources\BaseCollection
+     * @return LanguageCollection|\Ominity\Api\Resources\BaseCollection
      * @throws ApiException
      */
     public function all(array $parameters = [])
