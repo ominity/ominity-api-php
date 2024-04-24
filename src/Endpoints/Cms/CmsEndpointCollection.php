@@ -34,11 +34,19 @@ class CmsEndpointCollection extends EndpointCollectionAbstract
      */
     public $pageComponents;
 
+    /**
+     * RESTful Route resource.
+     *
+     * @var PageEndpoint
+     */
+    public $routes;
+
     public function initializeEndpoints()
     {
         $this->components = new ComponentEndpoint($this->client);
         $this->layouts = new LayoutEndpoint($this->client);
         $this->pages = new PageEndpoint($this->client);
         $this->pageComponents = new PageComponentEndpoint($this->client);
+        $this->routes = new RouteEndpoint($this->client);
     }
 }

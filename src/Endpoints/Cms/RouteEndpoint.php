@@ -4,13 +4,13 @@ namespace Ominity\Api\Endpoints\Cms;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\Resources\Cms\Page;
-use Ominity\Api\Resources\Cms\PageCollection;
+use Ominity\Api\Resources\Cms\Route;
+use Ominity\Api\Resources\Cms\RouteCollection;
 use Ominity\Api\Resources\LazyCollection;
 
-class PageEndpoint extends CollectionEndpointAbstract
+class RouteEndpoint extends CollectionEndpointAbstract
 {
-    protected $resourcePath = "cms/pages";
+    protected $resourcePath = "cms/routes";
 
     /**
      * Get the object that is used by this API. Every API uses one type of object.
@@ -19,7 +19,7 @@ class PageEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceObject()
     {
-        return new Page($this->client);
+        return new Route($this->client);
     }
 
     /**
@@ -32,23 +32,23 @@ class PageEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new PageCollection($this->client, $count, $_links);
+        return new RouteCollection($this->client, $count, $_links);
     }
 
     /**
-     * Retrieve an Page from the API.
+     * Retrieve an Route from the API.
      *
-     * Will throw a ApiException if the page id is invalid or the resource cannot be found.
+     * Will throw a ApiException if the route id is invalid or the resource cannot be found.
      *
-     * @param string $pageId
+     * @param string $routeId
      * @param array $parameters
      *
-     * @return Page
+     * @return Route
      * @throws ApiException
      */
-    public function get($pageId, array $parameters = [])
+    public function get($routeId, array $parameters = [])
     {
-        return $this->rest_read($pageId, $parameters);
+        return $this->rest_read($routeId, $parameters);
     }
 
     /**
@@ -58,7 +58,7 @@ class PageEndpoint extends CollectionEndpointAbstract
      * @param int $limit
      * @param array $parameters
      *
-     * @return PageCollection
+     * @return RouteCollection
      * @throws ApiException
      */
     public function page($page = null, $limit = null, array $parameters = [])
@@ -71,7 +71,7 @@ class PageEndpoint extends CollectionEndpointAbstract
      *
      * @param array $parameters
      *
-     * @return \Ominity\Api\Resources\BaseCollection
+     * @return RouteCollection|\Ominity\Api\Resources\BaseCollection
      * @throws ApiException
      */
     public function all(array $parameters = [])
@@ -87,7 +87,7 @@ class PageEndpoint extends CollectionEndpointAbstract
      * @param array $parameters
      * @param bool $iterateBackwards Set to true for reverse order iteration (default is false).
      *
-     * @return LazyCollection
+     * @return RouteCollection|LazyCollection
      */
     public function iterator(?string $page = null, ?int $limit = null, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
