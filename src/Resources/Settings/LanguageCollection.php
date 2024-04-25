@@ -32,4 +32,21 @@ class LanguageCollection extends BaseCollection
 
         return null;
     }
+
+    /**
+     * Get default language if in collection.
+     * Returns null if the default language is not included in the collection.
+     *
+     * @return Language|null
+     */
+    public function getDefault()
+    {
+        foreach ($this as $language) {
+            if ($language->isDefault) {
+                return $language;
+            }
+        }
+
+        return null;
+    }
 }
