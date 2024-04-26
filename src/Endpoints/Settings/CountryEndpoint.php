@@ -6,6 +6,7 @@ use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Resources\Settings\Country;
+use Ominity\Api\Resources\Settings\CountryCollection;
 
 class CountryEndpoint extends CollectionEndpointAbstract
 {
@@ -31,7 +32,7 @@ class CountryEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new CountryEndpoint($this->client, $count, $_links);
+        return new CountryCollection($this->client, $count, $_links);
     }
 
     /**
