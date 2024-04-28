@@ -125,6 +125,7 @@ class OminityApiClient
     {
         $this->cms = new CmsEndpointCollection($this);
         $this->settings = new SettingsEndpointCollection($this);
+        $this->modules = new ModulesEndpointCollection($this);
     }
 
     protected function initializeVersionStrings()
