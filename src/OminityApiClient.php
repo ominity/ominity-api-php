@@ -3,6 +3,7 @@
 namespace Ominity\Api;
 
 use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
+use Ominity\Api\Endpoints\Modules\ModulesEndpointCollection;
 use Ominity\Api\Endpoints\Settings\SettingsEndpointCollection;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
@@ -58,6 +59,13 @@ class OminityApiClient
      * @var SettingsEndpointCollection
      */
     public $settings;
+
+    /**
+     * RESTful Modules endppoints.
+     *
+     * @var ModulesEndpointCollection
+     */
+    public $modules;
     
     /**
      * @var string
