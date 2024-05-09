@@ -3,6 +3,7 @@
 namespace Ominity\Api;
 
 use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
+use Ominity\Api\Endpoints\Commerce\CommerceEndpointCollection;
 use Ominity\Api\Endpoints\Modules\ModulesEndpointCollection;
 use Ominity\Api\Endpoints\Settings\SettingsEndpointCollection;
 use Ominity\Api\Exceptions\ApiException;
@@ -52,6 +53,13 @@ class OminityApiClient
      * @var CmsEndpointCollection
      */
     public $cms;
+
+    /**
+     * RESTful Commerce endppoints.
+     *
+     * @var CommerceEndpointCollection
+     */
+    public $commerce;
 
     /**
      * RESTful Settings endppoints.
@@ -124,6 +132,7 @@ class OminityApiClient
     public function initializeEndpoints()
     {
         $this->cms = new CmsEndpointCollection($this);
+        $this->commerce = new CommerceEndpointCollection($this);
         $this->settings = new SettingsEndpointCollection($this);
         $this->modules = new ModulesEndpointCollection($this);
     }

@@ -16,9 +16,9 @@ class PageComponentCollection extends BaseCollection
 
     /**
      * Get a specific page component.
-     * Returns null if the order line cannot be found.
+     * Returns null if the page component cannot be found.
      *
-     * @param  string $fieldId
+     * @param  int $pageComponentId
      * @return PageComponent|null
      */
     public function get($pageComponentId)

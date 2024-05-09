@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Ominity\Api\Endpoints\Cms;
 
 use Ominity\Api\Resources\LazyCollection;
