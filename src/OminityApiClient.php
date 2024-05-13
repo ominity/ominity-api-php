@@ -6,6 +6,8 @@ use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
 use Ominity\Api\Endpoints\Commerce\CommerceEndpointCollection;
 use Ominity\Api\Endpoints\Modules\ModulesEndpointCollection;
 use Ominity\Api\Endpoints\Settings\SettingsEndpointCollection;
+use Ominity\Api\Endpoints\Users\UserEndpoint;
+use Ominity\Api\Endpoints\Users\UsersEndpointCollection;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
 use Ominity\Api\Exceptions\IncompatiblePlatform;
@@ -67,6 +69,13 @@ class OminityApiClient
      * @var SettingsEndpointCollection
      */
     public $settings;
+
+    /**
+     * RESTful Users endppoint.
+     *
+     * @var UserEndpoint
+     */
+    public $users;
 
     /**
      * RESTful Modules endppoints.
@@ -134,6 +143,7 @@ class OminityApiClient
         $this->cms = new CmsEndpointCollection($this);
         $this->commerce = new CommerceEndpointCollection($this);
         $this->settings = new SettingsEndpointCollection($this);
+        $this->users = new UserEndpoint($this);
         $this->modules = new ModulesEndpointCollection($this);
     }
 
@@ -186,8 +196,7 @@ class OminityApiClient
     }
 
     /**
-     * TODO: fix regex
-     * @param string $apiKey The API key, starting with 'test_' or 'live_'
+     * @param string $apiKey The API key, needs to be 32 characters long
      *
      * @return OminityApiClient
      * @throws ApiException
@@ -196,8 +205,8 @@ class OminityApiClient
     {
         $apiKey = trim($apiKey);
 
-        if (! preg_match('/^(live|test)_\w{30,}$/', $apiKey)) {
-            throw new ApiException("Invalid API key: '{$apiKey}'. An API key must start with 'test_' or 'live_' and must be at least 30 characters long.");
+        if (! preg_match('/^[0-9a-zA-Z]{32}$/', $apiKey)) {
+            throw new ApiException("Invalid API key: '{$apiKey}'. An API key must be a 32-character alphanumeric string.");
         }
 
         $this->apiKey = $apiKey;
@@ -207,7 +216,7 @@ class OminityApiClient
     }
 
     /**
-     * @param string $accessToken OAuth access token, starting with 'access_'
+     * @param string $accessToken OAuth access token, a well-formed JWT
      *
      * @return OminityApiClient
      * @throws ApiException
@@ -216,8 +225,8 @@ class OminityApiClient
     {
         $accessToken = trim($accessToken);
 
-        if (! preg_match('/^access_\w+$/', $accessToken)) {
-            throw new ApiException("Invalid OAuth access token: '{$accessToken}'. An access token must start with 'access_'.");
+        if (! preg_match('/^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$/', $accessToken)) {
+            throw new ApiException("Invalid OAuth access token: '{$accessToken}'. An access token must be a well-formed JWT.");
         }
 
         $this->apiKey = $accessToken;

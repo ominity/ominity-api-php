@@ -65,7 +65,7 @@ class Submission extends BaseResource
 
     /**
      * @return \Ominity\Api\Resources\Modules\Forms\Submission
-     * @throws \Mollie\Api\Exceptions\ApiException
+     * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function update()
     {
