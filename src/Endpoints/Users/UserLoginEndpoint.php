@@ -111,7 +111,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
      * Retrieves a collection of user logins for a specific User.
      *
      * @param User $user
-     * @param string $page The page number to request
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      * @return UserLoginCollection
@@ -127,7 +127,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
      * Retrieves a collection of user logins for a specific User ID.
      *
      * @param int $userId
-     * @param string $page The page number to request
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      * @return UserLoginCollection

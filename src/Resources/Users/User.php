@@ -49,6 +49,13 @@ class User extends BaseResource
      */
     public $avatar;
 
+    /**
+     * Preffered language of the user in ISO 639-1 format.
+     *
+     * @var string|null
+     */
+    public $language;
+
     /** 
      * UTC datetime the page was last updated in ISO-8601 format.
      *
