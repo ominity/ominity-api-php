@@ -21,11 +21,11 @@ class CustomerUser extends BaseResource
     public $userId;
 
     /**
-     * ID of the company.
+     * ID of the customer.
      *
      * @var int
      */
-    public $companyId;
+    public $customerId;
 
     /**
      * Role ID of the user.
