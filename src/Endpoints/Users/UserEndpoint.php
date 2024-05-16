@@ -13,13 +13,26 @@ class UserEndpoint extends CollectionEndpointAbstract
 {
     protected $resourcePath = "users";
 
+    /**
+     * RESTful UserLogin resource.
+     * 
+     * @var UserLoginEndpoint
+     */
     public UserLoginEndpoint $logins;
+
+    /**
+     * RESTful UserSocial resource.
+     * 
+     * @var UserSocialEndpoint
+     */
+    public UserSocialEndpoint $socials;
 
     public function __construct(OminityApiClient $client)
     {
         parent::__construct($client);
         
         $this->logins = new UserLoginEndpoint($client);
+        $this->socials = new UserSocialEndpoint($client);
     }
 
     /**
