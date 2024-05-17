@@ -20,9 +20,17 @@ class SettingsEndpointCollection extends EndpointCollectionAbstract
      */
     public $languages;
 
+    /**
+     * RESTful SocialProvider resource.
+     *
+     * @var SocialProviderEndpoint
+     */
+    public $socialproviders;
+
     public function initializeEndpoints()
     {
         $this->countries = new CountryEndpoint($this->client);
         $this->languages = new LanguageEndpoint($this->client);
+        $this->socialproviders = new SocialProviderEndpoint($this->client);
     }
 }

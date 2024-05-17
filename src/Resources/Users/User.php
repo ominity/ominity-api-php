@@ -2,6 +2,8 @@
 
 namespace Ominity\Api\Resources\Users;
 
+use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
 
@@ -88,11 +90,30 @@ class User extends BaseResource
         $body = [
             "firstName" => $this->firstName,
             "lastName" => $this->lastName,
-            "email" => $this->email
+            "email" => $this->email,
+            "avatar" => $this->avatar,
         ];
 
         $result = $this->client->users->update($this->id, $body);
 
         return ResourceFactory::createFromApiResult($result, new User($this->client));
+    }
+
+    /**
+     * Get access token for this user
+     *
+     * @return \stdClass
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function token()
+    {
+        if (! isset($this->_links->token->href)) {
+            throw new ApiException("API key required for this operation");
+        }
+
+        return $this->client->performHttpCallToFullUrl(
+            OminityApiClient::HTTP_GET,
+            $this->_links->token->href
+        );
     }
 }

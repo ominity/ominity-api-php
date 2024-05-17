@@ -1,0 +1,141 @@
+<?php
+
+namespace Ominity\Api\Endpoints\Settings;
+
+use Ominity\Api\Resources\LazyCollection;
+use Ominity\Api\Endpoints\CollectionEndpointAbstract;
+use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\Resources\Settings\SocialProvider;
+use Ominity\Api\Resources\Settings\SocialProviderUser;
+use Ominity\Api\Resources\Settings\SocialProviderUserCollection;
+
+class SocialProviderUserEndpoint extends CollectionEndpointAbstract
+{
+    /**
+     * @var string
+     */
+    protected $resourcePath = "settings/socialproviders_users";
+
+    /**
+     * @inheritDoc
+     */
+    protected function getResourceCollectionObject($count, $_links)
+    {
+        return new SocialProviderUserCollection($this->client, $count, $_links);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getResourceObject()
+    {
+        return new SocialProviderUser($this->client);
+    }
+
+    /**
+     * Get the user record for a specific SocialProvider.
+     *
+     * @param SocialProvider $provider
+     * @param int $userId
+     * @return SocialProviderUser
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function getFor(SocialProvider $provider, int $userId, array $parameters = []) {
+        if (empty($provider)) {
+            throw new ApiException("Provider is empty.");
+        }
+
+        if (empty($userId)) {
+            throw new ApiException("User ID is empty.");
+        }
+
+        return $this->getForId($provider->id, $userId, $parameters);
+    }
+
+    /**
+     * Get the user record for a specific SocialProvider ID.
+     *
+     * @param int $providerId
+     * @param int $userId
+     * @return SocialProviderUser
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function getForId(int $providerId, int $userId, array $parameters = []) {
+        if (empty($providerId)) {
+            throw new ApiException("Provider ID is empty.");
+        }
+
+        if (empty($userId)) {
+            throw new ApiException("User ID is empty.");
+        }
+
+        $this->parentId = $providerId;
+        return parent::rest_read($userId, $parameters);
+    }
+
+    /**
+     * Retrieves a collection of users for a specific SocialProvider.
+     *
+     * @param SocialProvider $provider
+     * @param int $page The page number to request
+     * @param int $limit
+     * @param array $parameters
+     * @return SocialProviderUserCollection
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function pageFor(SocialProvider $provider, $page = null, $limit = null, array $parameters = [])
+    {
+        return $this->pageForId($provider->id, $page, $limit, $parameters);
+    }
+
+    /**
+     * Retrieves a collection of users for a specific SocialProvider ID.
+     *
+     * @param int $providerId
+     * @param int $page The page number to request
+     * @param int $limit
+     * @param array $parameters
+     * @return SocialProviderUserCollection
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function pageForId(int $providerId, $page = null, $limit = null, array $parameters = [])
+    {
+        $this->parentId = $providerId;
+
+        return parent::rest_list($page, $limit, $parameters);
+    }
+
+    /**
+     * Create an iterator for iterating over users for the given provider retrieved from Ominity.
+     *
+     * @param SocialProvider $provider
+     * @param array $parameters
+     * @param bool $iterateBackwards Set to true for reverse order iteration (default is false).
+     *
+     * @return LazyCollection
+     */
+    public function iteratorFor(SocialProvider $provider, array $parameters = [], bool $iterateBackwards = false): LazyCollection
+    {
+        return $this->iteratorForId($provider->id, $parameters, $iterateBackwards);
+    }
+
+    /**
+     * Create an iterator for iterating over users for the given provider id retrieved from Ominity.
+     *
+     * @param int $providerId
+     * @param array $parameters
+     * @param bool $iterateBackwards Set to true for reverse order iteration (default is false).
+     *
+     * @return LazyCollection
+     */
+    public function iteratorForId(int $providerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
+    {
+        $this->parentId = $providerId;
+
+        return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
+    }
+}
