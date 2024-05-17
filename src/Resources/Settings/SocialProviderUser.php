@@ -86,6 +86,16 @@ class SocialProviderUser extends BaseResource
     public $_links;
 
     /**
+     * Has this oauth account a user associated?
+     *
+     * @return bool
+     */
+    public function hasUser()
+    {
+        return !is_null($this->userId);
+    }
+
+    /**
      * Saves the social providers userId
      *
      * @return \Mollie\Api\Resources\SocialProviderUser
