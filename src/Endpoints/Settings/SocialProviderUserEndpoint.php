@@ -33,6 +33,53 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Get the user record for a specific SocialProvider by a one-time usage auth code.
+     *
+     * @param SocialProvider $provider
+     * @param string $code
+     * @return SocialProviderUser
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function getForByCode(SocialProvider $provider, string $code, array $parameters = []) {
+        if (empty($provider)) {
+            throw new ApiException("Provider is empty.");
+        }
+
+        if (empty($code)) {
+            throw new ApiException("Code is empty.");
+        }
+
+        return $this->getForIdByCode($provider->id, $code, $parameters);
+    }
+
+    /**
+     * Get the user record for a specific SocialProvider ID by a one-time usage auth code.
+     *
+     * @param int $providerId
+     * @param string $code
+     * @return SocialProviderUser
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function getForIdByCode(int $providerId, string $code, array $parameters = []) {
+        if (empty($proviproviderIdder)) {
+            throw new ApiException("Provider ID is empty.");
+        }
+
+        if (empty($code)) {
+            throw new ApiException("Code is empty.");
+        }
+
+        $parameters = array_merge($parameters, [
+            'code' => $code
+        ]);
+
+        $this->parentId = $providerId;
+        return parent::rest_read('token', $parameters);
+    }
+
+    /**
      * Get the user record for a specific SocialProvider.
      *
      * @param SocialProvider $provider
