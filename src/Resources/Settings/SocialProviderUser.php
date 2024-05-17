@@ -2,7 +2,9 @@
 
 namespace Ominity\Api\Resources\Settings;
 
+use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\ResourceFactory;
 
 class SocialProviderUser extends BaseResource
 {
@@ -26,6 +28,20 @@ class SocialProviderUser extends BaseResource
      * @var int
      */
     public $providerId;
+
+    /**
+     * Id of the user.
+     *
+     * @var int|null
+     */
+    public $userId;
+
+    /**
+     * External identifier of the user.
+     *
+     * @var string
+     */
+    public $identifier;
 
     /**
      * Name of the user.
@@ -68,4 +84,39 @@ class SocialProviderUser extends BaseResource
      * @var \stdClass
      */
     public $_links;
+
+    /**
+     * Saves the social providers userId
+     *
+     * @return \Mollie\Api\Resources\SocialProviderUser
+     * @throws \Mollie\Api\Exceptions\ApiException
+     */
+    public function update()
+    {
+        $body = [
+            "userId" => $this->userId
+        ];
+
+        $result = $this->client->settings->socialproviders->users->updateForId($this->providerId, $this->id, $body);
+
+        return ResourceFactory::createFromApiResult($result, new SocialProviderUser($this->client));
+    }
+
+    /**
+     * Delete a social provider user
+     *
+     * @return null|\stdClass|SocialProviderUser
+     */
+    public function delete() {
+        if (! isset($this->_links->self->href)) {
+            return $this;
+        }
+
+        $result = $this->client->performHttpCallToFullUrl(
+            OminityApiClient::HTTP_DELETE,
+            $this->_links->self->href
+        );
+
+        return $result;
+    }
 }

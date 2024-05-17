@@ -116,4 +116,15 @@ class User extends BaseResource
             $this->_links->token->href
         );
     }
+
+    /**
+     * Get all oauth accounts for this user
+     *
+     * @return SocialProviderUserCollection
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function oauthaccounts()
+    {
+        return $this->client->users->oauthaccounts->allFor($this);
+    }
 }

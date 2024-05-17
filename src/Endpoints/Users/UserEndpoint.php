@@ -21,18 +21,18 @@ class UserEndpoint extends CollectionEndpointAbstract
     public UserLoginEndpoint $logins;
 
     /**
-     * RESTful UserSocial resource.
+     * RESTful SocialProviderUser resource.
      * 
-     * @var UserSocialEndpoint
+     * @var UserOauthAccountEndpoint
      */
-    public UserSocialEndpoint $socials;
+    public UserOauthAccountEndpoint $oauthaccounts;
 
     public function __construct(OminityApiClient $client)
     {
         parent::__construct($client);
         
         $this->logins = new UserLoginEndpoint($client);
-        $this->socials = new UserSocialEndpoint($client);
+        $this->oauthaccounts = new UserOauthAccountEndpoint($client);
     }
 
     /**

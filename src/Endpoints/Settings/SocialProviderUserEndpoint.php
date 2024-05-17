@@ -33,6 +33,56 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Update a specific SocialProvider resource
+     *
+     * Will throw a ApiException if the userId id is invalid or the resource cannot be found.
+     *
+     * @param string $userId
+     *
+     * @param array $data
+     * @return SocialProviderUser
+     * @throws ApiException
+     */
+    public function updateFor(SocialProvider $provider, $userId, array $data = [])
+    {
+        if (empty($provider)) {
+            throw new ApiException("Provider is empty.");
+        }
+
+        if (empty($userId)) {
+            throw new ApiException("User ID is empty.");
+        }
+
+        return $this->updateForId($provider->id, $userId, $data);
+    }
+
+    /**
+     * Update a specific SocialProvider resource
+     *
+     * Will throw a ApiException if the userId id is invalid or the resource cannot be found.
+     *
+     * @param int $providerId
+     * @param string $userId
+     *
+     * @param array $data
+     * @return SocialProviderUser
+     * @throws ApiException
+     */
+    public function updateForId(int $providerId, $userId, array $data = [])
+    {
+        if (empty($providerId)) {
+            throw new ApiException("Provider ID is empty.");
+        }
+
+        if (empty($userId)) {
+            throw new ApiException("User ID is empty.");
+        }
+
+        $this->parentId = $providerId;
+        return parent::rest_update($userId, $data);
+    }
+
+    /**
      * Get the user record for a specific SocialProvider by a one-time usage auth code.
      *
      * @param SocialProvider $provider
