@@ -14,6 +14,13 @@ class UserEndpoint extends CollectionEndpointAbstract
     protected $resourcePath = "users";
 
     /**
+     * RESTful CustomerUser resource.
+     * 
+     * @var UserCustomerEndpoint
+     */
+    public UserCustomerEndpoint $customers;
+
+    /**
      * RESTful UserLogin resource.
      * 
      * @var UserLoginEndpoint
@@ -31,6 +38,7 @@ class UserEndpoint extends CollectionEndpointAbstract
     {
         parent::__construct($client);
         
+        $this->customers = new UserCustomerEndpoint($client);
         $this->logins = new UserLoginEndpoint($client);
         $this->oauthaccounts = new UserOauthAccountEndpoint($client);
     }

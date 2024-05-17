@@ -118,6 +118,17 @@ class User extends BaseResource
     }
 
     /**
+     * Get all customer accounts for this user
+     *
+     * @return CustomerUserCollection
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function customers()
+    {
+        return $this->client->users->customers->allFor($this);
+    }
+
+    /**
      * Get all oauth accounts for this user
      *
      * @return SocialProviderUserCollection
