@@ -63,7 +63,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
      * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function getForIdByCode(int $providerId, string $code, array $parameters = []) {
-        if (empty($proviproviderIdder)) {
+        if (empty($providerId)) {
             throw new ApiException("Provider ID is empty.");
         }
 
