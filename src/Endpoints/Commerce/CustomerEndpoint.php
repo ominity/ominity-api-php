@@ -51,6 +51,39 @@ class CustomerEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Creates a customer in Ominity.
+     *
+     * @param array $data An array containing details of the customer.
+     * @param array $filters
+     *
+     * @return Customer
+     * @throws ApiException
+     */
+    public function create(array $data = [], array $filters = [])
+    {
+        return $this->rest_create($data, $filters);
+    }
+
+    /**
+     * Update a specific Customer resource
+     *
+     * Will throw a ApiException if the custoemr id is invalid or the resource cannot be found.
+     *
+     * @param int $customerId
+     * @param array $data
+     * @return Customer
+     * @throws ApiException
+     */
+    public function update($customerId, array $data = [])
+    {
+        if (empty($customerId)) {
+            throw new ApiException("Invalid customer ID.");
+        }
+
+        return parent::rest_update($customerId, $data);
+    }
+
+    /**
      * Retrieve an Customer from the API.
      *
      * Will throw a ApiException if the page id is invalid or the resource cannot be found.

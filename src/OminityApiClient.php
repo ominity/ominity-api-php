@@ -7,7 +7,6 @@ use Ominity\Api\Endpoints\Commerce\CommerceEndpointCollection;
 use Ominity\Api\Endpoints\Modules\ModulesEndpointCollection;
 use Ominity\Api\Endpoints\Settings\SettingsEndpointCollection;
 use Ominity\Api\Endpoints\Users\UserEndpoint;
-use Ominity\Api\Endpoints\Users\UsersEndpointCollection;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
 use Ominity\Api\Exceptions\IncompatiblePlatform;

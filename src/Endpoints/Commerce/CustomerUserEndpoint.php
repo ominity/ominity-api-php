@@ -143,6 +143,34 @@ class CustomerUserEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * This is a wrapper method for pageFor
+     *
+     * @param Customer $customer
+     * @param array $parameters
+     *
+     * @return CustomerUserCollection
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function allFor(Customer $customer, array $parameters = [])
+    {
+        return $this->pageFor($customer, null, null, $parameters);
+    }
+
+    /**
+     * This is a wrapper method for pageForId
+     *
+     * @param int $customerId
+     * @param array $parameters
+     * @return CustomerUserCollection
+     * 
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function allForId(int $customerId, array $parameters = [])
+    {
+        return $this->pageForId($customerId, null, null, $parameters);
+    }
+
+    /**
      * Create an iterator for iterating over addresses for the given customer retrieved from Ominity.
      *
      * @param Customer $customer

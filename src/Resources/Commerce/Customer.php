@@ -51,6 +51,13 @@ class Customer extends BaseResource
     public $companyVat;
 
     /**
+     * Phone number of the customer.
+     *
+     * @var string
+     */
+    public $phone;
+
+    /**
      * Default billing address of the customer.
      *
      * @var \stdClass|null
@@ -152,6 +159,27 @@ class Customer extends BaseResource
      * @throws ApiException
      */
     public function users() {
-        return $this->client->commerce->customers->users->pageFor($this);
+        return $this->client->commerce->customers->users->allFor($this);
+    }
+
+    /**
+     * Saves the user's updated details.
+     *
+     * @return User
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function update()
+    {
+        $body = [
+            "type" => $this->type,
+            "companyName" => $this->companyName,
+            "companyVat" => $this->companyVat,
+            "phone" => $this->phone,
+            "ownerId" => $this->ownerId,
+        ];
+
+        $result = $this->client->users->update($this->id, $body);
+
+        return ResourceFactory::createFromApiResult($result, new User($this->client));
     }
 }
