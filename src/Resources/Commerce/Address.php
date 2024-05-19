@@ -86,9 +86,9 @@ class Address extends BaseResource
     public $region;
 
     /**
-     * Country of the address
+     * Country of the address in ISO 3166-1 alpha-2 format.
      *
-     * @var \stdClass|null
+     * @var string
      */
     public $country;
 
@@ -117,13 +117,14 @@ class Address extends BaseResource
      * Get country
      * 
      * @return Country|null
+     * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function country() {
         if (! isset($this->country)) {
             return null;
         }
 
-        return ResourceFactory::createFromApiResult($this->country, new Country($this->client));
+        return $this->client->settings->countries->getByCode($this->country);
     }
 
     /**
@@ -143,7 +144,7 @@ class Address extends BaseResource
             "postalCode" => $this->postalCode,
             "city" => $this->city,
             "region" => $this->region,
-            "country" => $this->country->code,
+            "country" => $this->country,
         ];
 
         $result = $this->client->commerce->customers->addresses->updateForId($this->customerId, $this->id, $body);
