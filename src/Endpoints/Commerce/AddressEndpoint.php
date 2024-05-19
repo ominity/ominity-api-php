@@ -33,6 +33,70 @@ class AddressEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Create a new address for a specific Customer.
+     *
+     * @param Customer $customer
+     * @param array $data
+     * @param array $filters
+     *
+     * @return Address
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function createFor(Customer $customer, array $data, array $filters = [])
+    {
+        return $this->createForId($customer->id, $data, $filters);
+    }
+
+    /**
+     * Create a new address for a specific Customer ID.
+     *
+     * @param int $customerId
+     * @param array $data
+     * @param array $filters
+     *
+     * @return Address
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function createForId($customerId, array $data, array $filters = [])
+    {
+        $this->parentId = $customerId;
+
+        return parent::rest_create($data, $filters);
+    }
+
+    /**
+     * Update an address for a specific Customer.
+     *
+     * @param Customer $customer
+     * @param int $addressId
+     * @param array $data
+     *
+     * @return Address
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function updateFor(Customer $customer, int $addressId, array $data)
+    {
+        return $this->updateForId($customer->id, $addressId, $data);
+    }
+
+    /**
+     * Update an address for a specific Customer ID.
+     *
+     * @param int $customerId
+     * @param int $addressId
+     * @param array $data
+     *
+     * @return Address
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function updateForId($customerId, int $addressId, array $data)
+    {
+        $this->parentId = $customerId;
+
+        return parent::rest_update($addressId, $data);
+    }
+
+    /**
      * Get the address for a specific Customer.
      *
      * @param Customer $product

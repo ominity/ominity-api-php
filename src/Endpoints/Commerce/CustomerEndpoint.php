@@ -13,6 +13,13 @@ class CustomerEndpoint extends CollectionEndpointAbstract
 {
     protected $resourcePath = "commerce/customers";
 
+    /**
+     * RESTful Address resource.
+     *
+     * @var AddressEndpoint
+     */
+    public AddressEndpoint $addresses;
+
      /**
      * RESTful CustomerUser resource.
      * 
@@ -24,6 +31,7 @@ class CustomerEndpoint extends CollectionEndpointAbstract
     {
         parent::__construct($client);
         
+        $this->addresses = new AddressEndpoint($client);
         $this->users = new CustomerUserEndpoint($client);
     }
 

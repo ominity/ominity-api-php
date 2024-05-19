@@ -125,4 +125,29 @@ class Address extends BaseResource
 
         return ResourceFactory::createFromApiResult($this->country, new Country($this->client));
     }
+
+    /**
+     * Saves the address's updated details.
+     *
+     * @return Address
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function update()
+    {
+        $body = [
+            "firstName" => $this->firstName,
+            "lastName" => $this->lastName,
+            "street" => $this->street,
+            "number" => $this->number,
+            "additional" => $this->additional,
+            "postalCode" => $this->postalCode,
+            "city" => $this->city,
+            "region" => $this->region,
+            "country" => $this->country->code,
+        ];
+
+        $result = $this->client->commerce->customers->addresses->updateForId($this->customerId, $this->id, $body);
+
+        return ResourceFactory::createFromApiResult($result, new Address($this->client));
+    }
 }

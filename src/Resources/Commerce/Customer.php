@@ -178,8 +178,8 @@ class Customer extends BaseResource
             "ownerId" => $this->ownerId,
         ];
 
-        $result = $this->client->users->update($this->id, $body);
+        $result = $this->client->commerce->customers->update($this->id, $body);
 
-        return ResourceFactory::createFromApiResult($result, new User($this->client));
+        return ResourceFactory::createFromApiResult($result, new Customer($this->client));
     }
 }
