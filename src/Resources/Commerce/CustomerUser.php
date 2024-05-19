@@ -28,7 +28,7 @@ class CustomerUser extends BaseResource
     public $customerId;
 
     /**
-     * Role ID of the user.
+     * Role ID of the role.
      *
      * @var int
      */
@@ -82,4 +82,24 @@ class CustomerUser extends BaseResource
      * @var \stdClass
      */
     public $_links;
+
+    /**
+     * Get the User
+     * 
+     * @return User
+     * @throws ApiException
+     */
+    public function user() {
+        return $this->client->users->get($this->userId);
+    }
+
+    /**
+     * Get the Customer
+     * 
+     * @return Customer
+     * @throws ApiException
+     */
+    public function customer() {
+        return $this->client->commerce->customers->get($this->customerId);
+    }
 }
