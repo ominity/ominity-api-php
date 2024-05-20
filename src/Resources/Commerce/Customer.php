@@ -4,6 +4,7 @@ namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
+use Ominity\Api\Resources\Users\User;
 use Ominity\Api\Types\CustomerType;
 
 class Customer extends BaseResource
@@ -143,12 +144,38 @@ class Customer extends BaseResource
     }
 
     /**
+     * Get all addresses for the customer
+     * 
+     * @return AddressCollection
+     * @throws ApiException
+     */
+    public function addresses() {
+        if ( isset($this->_embedded->addresses)) {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                Address::class,
+                $this->_embedded->addresses
+            );
+        }
+
+        return $this->client->commerce->customers->addresses->listFor($this);
+    }
+
+    /**
      * Get shipping address
      * 
      * @return User
      * @throws ApiException
      */
     public function owner() {
+        if(isset($this->_embedded->users)) {
+            foreach($this->_embedded->users as $user) {
+                if($user->id === $this->ownerId) {
+                    return ResourceFactory::createFromApiResult($user, new User($this->client));
+                }
+            }
+        }
+        
         return $this->client->users->get($this->ownerId);
     }
 
