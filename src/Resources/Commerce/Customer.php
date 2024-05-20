@@ -170,7 +170,7 @@ class Customer extends BaseResource
     public function owner() {
         if(isset($this->_embedded->users)) {
             foreach($this->_embedded->users as $user) {
-                if($user->id === $this->ownerId) {
+                if($user->id == $this->ownerId) {
                     return ResourceFactory::createFromApiResult($user, new User($this->client));
                 }
             }

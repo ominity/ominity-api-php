@@ -21,6 +21,13 @@ class SettingsEndpointCollection extends EndpointCollectionAbstract
     public $languages;
 
     /**
+     * RESTful Payment Method resource.
+     *
+     * @var PaymentMethodEndpoint
+     */
+    public $paymentmethods;
+
+    /**
      * RESTful SocialProvider resource.
      *
      * @var SocialProviderEndpoint
@@ -31,6 +38,7 @@ class SettingsEndpointCollection extends EndpointCollectionAbstract
     {
         $this->countries = new CountryEndpoint($this->client);
         $this->languages = new LanguageEndpoint($this->client);
+        $this->paymentmethods = new PaymentMethodEndpoint($this->client);
         $this->socialproviders = new SocialProviderEndpoint($this->client);
     }
 }
