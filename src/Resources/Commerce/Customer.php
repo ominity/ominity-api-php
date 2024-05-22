@@ -72,6 +72,13 @@ class Customer extends BaseResource
      */
     public $shippingAddress;
 
+    /**
+     * Is this customer exempt from taxes?
+     *
+     * @var bool
+     */
+    public $isTaxExempt;
+
     /** 
      * UTC datetime the customer was last updated in ISO-8601 format.
      *

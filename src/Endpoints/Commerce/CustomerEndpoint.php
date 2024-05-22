@@ -20,6 +20,13 @@ class CustomerEndpoint extends CollectionEndpointAbstract
      */
     public AddressEndpoint $addresses;
 
+    /**
+     * RESTful Payment resource.
+     * 
+     * @var CustomerPaymentEndpoint
+     */
+    public CustomerPaymentEndpoint $payments;
+
      /**
      * RESTful CustomerUser resource.
      * 
@@ -32,6 +39,7 @@ class CustomerEndpoint extends CollectionEndpointAbstract
         parent::__construct($client);
         
         $this->addresses = new AddressEndpoint($client);
+        $this->payments = new CustomerPaymentEndpoint($client);
         $this->users = new CustomerUserEndpoint($client);
     }
 
