@@ -25,7 +25,7 @@ class Address extends BaseResource
     /**
      * Customer ID of the address.
      *
-     * @var string
+     * @var int
      */
     public $customerId;
 
