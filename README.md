@@ -23,10 +23,11 @@ Include the ``vendor/autoload.php``
 
 ## Usage ##
 
-Initializing the Ominity API client, and setting your API key.
+Initializing the Ominity API client, and setting your endpoint and API key.
 
 ```php
 $ominity = new \Ominity\Api\OminityApiClient();
+$ominity->setApiEndpoint("https://ominity.example.com/api");
 $ominity->setApiKey("q48fd94qs98fd4sqf89fza9sqd89f4");
 ```
 
@@ -43,7 +44,7 @@ To enable debugging and inspect the request:
 $ominity->enableDebugging();
 
 try {
-    $ominity->products->get(1);
+    $ominity->commerce->products->get(1);
 } catch (\Ominity\Api\Exceptions\ApiException $exception) {
     $request = $exception->getRequest();
 }
