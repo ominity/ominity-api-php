@@ -39,6 +39,14 @@ class Order extends BaseResource
     public $invoiceId;
 
     /**
+     * If a status of this order is not DRAFT the order number will
+     * be available here as well.
+     *
+     * @var string|null
+     */
+    public $number;
+
+    /**
      * The status of the order.
      *
      * @var string|OrderStatus
@@ -255,6 +263,20 @@ class Order extends BaseResource
         }
 
         return $this->client->commerce->customers->get($this->customerId);
+    }
+
+    /**
+     * Get the invoice related to this order.
+     *
+     * @return Invoice|null
+     */
+    public function invoice()
+    {
+        if (empty($this->invoiceId)) {
+            return null;
+        }
+
+        return $this->client->commerce->invoices->get($this->invoiceId);
     }
 
     /**

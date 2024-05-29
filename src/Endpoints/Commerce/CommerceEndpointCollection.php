@@ -14,6 +14,13 @@ class CommerceEndpointCollection extends EndpointCollectionAbstract
     public CustomerEndpoint $customers;
 
     /**
+     * RESTful Invoice resource.
+     *
+     * @var InvoiceEndpoint
+     */
+    public InvoiceEndpoint $invoices;
+
+    /**
      * RESTful Product resource.
      *
      * @var ProductEndpoint
@@ -44,6 +51,7 @@ class CommerceEndpointCollection extends EndpointCollectionAbstract
     public function initializeEndpoints()
     {
         $this->customers = new CustomerEndpoint($this->client);
+        $this->invoices = new InvoiceEndpoint($this->client);
         $this->products = new ProductEndpoint($this->client);
         $this->productOffers = new ProductOfferEndpoint($this->client);
         $this->subscriptionIntervals = new SubscriptionIntervalEndpoint($this->client);
