@@ -43,6 +43,13 @@ class Mandate extends BaseResource
     public $status;
 
     /**
+     * Icon image of the payment method for this mandate.
+     *
+     * @var string
+     */
+    public $imageUrl;
+
+    /**
      * Details of an active mandate are set here. For example, the Direct Debit
      * mandate method will set $details->accountNumber and $details->accountBic.
      *
