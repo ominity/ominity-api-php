@@ -11,7 +11,7 @@ class InvoiceCollection extends PaginatedCollection
      */
     public function getCollectionResourceName()
     {
-        return "invoice";
+        return "invoices";
     }
 
     /**
