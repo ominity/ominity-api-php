@@ -30,7 +30,7 @@ class CustomerEndpoint extends CollectionEndpointAbstract
     /**
      * RESTful Mandate resource.
      *
-     * @var AddressEndpoint
+     * @var CustomerMandateEndpoint
      */
     public CustomerMandateEndpoint $mandates;
 

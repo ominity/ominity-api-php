@@ -153,10 +153,11 @@ class Customer extends BaseResource
     /**
      * Get all addresses for the customer
      * 
+     * @param  array $parameters
      * @return AddressCollection
      * @throws ApiException
      */
-    public function addresses() {
+    public function addresses($parameters = []) {
         if ( isset($this->_embedded->addresses)) {
             return ResourceFactory::createBaseResourceCollection(
                 $this->client,
@@ -165,7 +166,64 @@ class Customer extends BaseResource
             );
         }
 
-        return $this->client->commerce->customers->addresses->listFor($this);
+        return $this->client->commerce->customers->addresses->listFor($this, $parameters);
+    }
+
+    /**
+     * Get all mandates for the customer
+     * 
+     * @param  array $parameters
+     * @return MandateCollection
+     * @throws ApiException
+     */
+    public function mandates($parameters = []) {
+        if ( isset($this->_embedded->mandates)) {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                Mandate::class,
+                $this->_embedded->mandates
+            );
+        }
+
+        return $this->client->commerce->customers->mandates->allFor($this, $parameters);
+    }
+
+    /**
+     * Get all orders for the customer
+     * 
+     * @param  array $parameters
+     * @return OrderCollection
+     * @throws ApiException
+     */
+    public function orders($parameters = []) {
+        if ( isset($this->_embedded->orders)) {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                Order::class,
+                $this->_embedded->orders
+            );
+        }
+
+        return $this->client->commerce->customers->orders->allFor($this, $parameters);
+    }
+
+    /**
+     * Get all invoices for the customer
+     * 
+     * @param  array $parameters
+     * @return InvoiceCollection
+     * @throws ApiException
+     */
+    public function invoices($parameters = []) {
+        if ( isset($this->_embedded->invoices)) {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                Invoice::class,
+                $this->_embedded->invoices
+            );
+        }
+
+        return $this->client->commerce->customers->invoices->allFor($this, $parameters);
     }
 
     /**
