@@ -34,11 +34,19 @@ class CommerceEndpointCollection extends EndpointCollectionAbstract
      */
     public $subscriptionIntervals;
 
+    /**
+     * RESTful VatValidation resource.
+     *
+     * @var VatValidationEndpoint
+     */
+    public VatValidationEndpoint $vatvalidations;
+
     public function initializeEndpoints()
     {
         $this->customers = new CustomerEndpoint($this->client);
         $this->products = new ProductEndpoint($this->client);
         $this->productOffers = new ProductOfferEndpoint($this->client);
         $this->subscriptionIntervals = new SubscriptionIntervalEndpoint($this->client);
+        $this->vatvalidations = new VatValidationEndpoint($this->client);
     }
 }
