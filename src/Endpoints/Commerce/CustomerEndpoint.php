@@ -115,7 +115,7 @@ class CustomerEndpoint extends CollectionEndpointAbstract
     /**
      * Update a specific Customer resource
      *
-     * Will throw a ApiException if the custoemr id is invalid or the resource cannot be found.
+     * Will throw a ApiException if the customer id is invalid or the resource cannot be found.
      *
      * @param int $customerId
      * @param array $data
