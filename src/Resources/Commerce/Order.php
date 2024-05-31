@@ -127,7 +127,7 @@ class Order extends BaseResource
     public $_links;
 
     /**
-     * @var \stdClass[]
+     * @var \stdClass|null
      */
     public $_embedded;
 
@@ -291,5 +291,38 @@ class Order extends BaseResource
             OrderLine::class,
             $this->lines
         );
+    }
+
+    /**
+     * Create a new payment for this Order.
+     *
+     * @param array $data
+     * @param array $filters
+     * @return \Ominity\Api\Resources\Commerce\Payment
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function createPayment($data, $filters = [])
+    {
+        return $this->client->commerce->orders->payments->createFor($this, $data, $filters);
+    }
+
+    /**
+     * Retrieve the payments for this order.
+     * Requires the order to be retrieved using the embed payments parameter.
+     *
+     * @return null|\Ominity\Api\Resources\Commerce\PaymentCollection
+     */
+    public function payments()
+    {
+        if (isset($this->_embedded, $this->_embedded->payments)) 
+        {
+            return ResourceFactory::createCursorResourceCollection(
+                $this->client,
+                $this->_embedded->payments,
+                Payment::class
+            );
+        }
+
+        return $this->client->commerce->orders->payments->allFor($this);
     }
 }
