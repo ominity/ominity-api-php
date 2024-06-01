@@ -2,8 +2,6 @@
 
 namespace Ominity\Api\Resources\Settings;
 
-use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
 
@@ -121,5 +119,19 @@ class PaymentMethod extends BaseResource
     public function supportsQRCode()
     {
         return isset($this->features->qrcode);
+    }
+
+    /**
+     * Get the issuers
+     *
+     * @return 
+     */
+    public function issuers()
+    {
+        return ResourceFactory::createBaseResourceCollection(
+            $this->client,
+            PaymentMethodIssuer::class,
+            $this->issuers
+        );
     }
 }
