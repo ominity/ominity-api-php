@@ -37,6 +37,13 @@ class Subscription extends BaseResource
     public $productId;
 
     /**
+     * The ID of the interval for this subscription
+     *
+     * @var int
+     */
+    public $intervalId;
+
+    /**
      * The status of the subscription.
      *
      * @var string
@@ -56,13 +63,6 @@ class Subscription extends BaseResource
      * @var \stdClass
      */
     public $recurringAmount;
-
-    /**
-     * The interval for this subscription
-     *
-     * @var \stdClass|SubscriptionInterval
-     */
-    public $interval;
 
     /**
      * Is this subscription pausable by the customer?
@@ -106,6 +106,11 @@ class Subscription extends BaseResource
      * @var \stdClass
      */
     public $_links;
+
+    /**
+     * @var \stdClass|null
+     */
+    public $_embedded;
 
     /**
      * Is this subscription still pending?
@@ -184,6 +189,14 @@ class Subscription extends BaseResource
      */
     public function product()
     {
+        if (isset($this->_embedded, $this->_embedded->product)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->product,
+                new Product($this->client)
+            );
+        }
+
         return $this->client->commerce->products->get($this->productId);
     }
 
@@ -194,9 +207,14 @@ class Subscription extends BaseResource
      */
     public function interval()
     {
-        return ResourceFactory::createFromApiResult(
-            $this->interval,
-            new SubscriptionInterval($this->client)
-        );
+        if (isset($this->_embedded, $this->_embedded->interval)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->interval,
+                new SubscriptionInterval($this->client)
+            );
+        }
+
+        return $this->client->commerce->subscriptionIntervals->get($this->intervalId);
     }
 }
