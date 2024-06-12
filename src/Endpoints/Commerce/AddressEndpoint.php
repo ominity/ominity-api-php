@@ -14,7 +14,7 @@ class AddressEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/customers_addresses";
+    protected $resourcePath = "commerce/customers/{customerId}/addresses";
 
     /**
      * @inheritDoc
@@ -59,7 +59,7 @@ class AddressEndpoint extends CollectionEndpointAbstract
      */
     public function createForId($customerId, array $data, array $filters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_create($data, $filters);
     }
@@ -91,7 +91,7 @@ class AddressEndpoint extends CollectionEndpointAbstract
      */
     public function updateForId($customerId, int $addressId, array $data)
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_update($addressId, $data);
     }
@@ -135,7 +135,7 @@ class AddressEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Address ID is empty.");
         }
 
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
         return parent::rest_read($addressId, $parameters);
     }
 
@@ -178,7 +178,7 @@ class AddressEndpoint extends CollectionEndpointAbstract
      */
     public function listForId(int $customerId, array $parameters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_list(null, null, $parameters);
     }
@@ -194,7 +194,7 @@ class AddressEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $customerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

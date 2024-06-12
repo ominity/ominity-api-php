@@ -14,7 +14,7 @@ class CustomerMandateEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/customers_mandates";
+    protected $resourcePath = "commerce/customers/{customerId}/mandates";
 
     /**
      * @inheritDoc
@@ -71,7 +71,7 @@ class CustomerMandateEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Mandate ID is empty.");
         }
 
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
         return parent::rest_read($mandateId, $parameters);
     }
 
@@ -104,7 +104,7 @@ class CustomerMandateEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $customerId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -162,7 +162,7 @@ class CustomerMandateEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $customerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

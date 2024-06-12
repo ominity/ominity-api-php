@@ -14,7 +14,7 @@ class CustomerPaymentEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/customers_payments";
+    protected $resourcePath = "commerce/customers/{customerId}/payments";
 
     /**
      * @inheritDoc
@@ -59,7 +59,7 @@ class CustomerPaymentEndpoint extends CollectionEndpointAbstract
      */
     public function createForId($customerId, array $data, array $filters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_create($data, $filters);
     }
@@ -103,7 +103,7 @@ class CustomerPaymentEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Payment ID is empty.");
         }
 
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
         return parent::rest_read($paymentId, $parameters);
     }
 
@@ -136,7 +136,7 @@ class CustomerPaymentEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $customerId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -194,7 +194,7 @@ class CustomerPaymentEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $customerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

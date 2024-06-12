@@ -14,7 +14,7 @@ class ProductOfferEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/products_offers";
+    protected $resourcePath = "commerce/products/{productId}/offers";
 
     /**
      * @inheritDoc
@@ -71,7 +71,7 @@ class ProductOfferEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Offer ID is empty.");
         }
 
-        $this->parentId = $productId;
+        $this->setPathVariables(['productId' => $productId]);
         return parent::rest_read($offerId, $parameters);
     }
 
@@ -114,7 +114,7 @@ class ProductOfferEndpoint extends CollectionEndpointAbstract
      */
     public function listForId(int $productId, array $parameters = [])
     {
-        $this->parentId = $productId;
+        $this->setPathVariables(['productId' => $productId]);
 
         return parent::rest_list(null, null, $parameters);
     }
@@ -130,7 +130,7 @@ class ProductOfferEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $productId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $productId;
+        $this->setPathVariables(['productId' => $productId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

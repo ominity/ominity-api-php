@@ -5,7 +5,6 @@ namespace Ominity\Api\Endpoints\Commerce;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\Resources\Commerce\AddressCollection;
 use Ominity\Api\Resources\Commerce\Customer;
 use Ominity\Api\Resources\Commerce\CustomerUser;
 use Ominity\Api\Resources\Commerce\CustomerUserCollection;
@@ -15,7 +14,7 @@ class CustomerUserEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/customers_users";
+    protected $resourcePath = "commerce/customers/{customerId}/users";
 
     /**
      * @inheritDoc
@@ -60,7 +59,7 @@ class CustomerUserEndpoint extends CollectionEndpointAbstract
      */
     public function createForId($customerId, array $data, array $filters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_create($data, $filters);
     }
@@ -104,7 +103,7 @@ class CustomerUserEndpoint extends CollectionEndpointAbstract
             throw new ApiException("User ID is empty.");
         }
 
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
         return parent::rest_read($userId, $parameters);
     }
 
@@ -137,7 +136,7 @@ class CustomerUserEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $customerId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -195,7 +194,7 @@ class CustomerUserEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $customerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

@@ -14,7 +14,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "users_logins";
+    protected $resourcePath = "users/{userId}/logins";
 
     /**
      * @inheritDoc
@@ -59,7 +59,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
      */
     public function createForId($userId, array $data, array $filters = [])
     {
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
 
         return parent::rest_create($data, $filters);
     }
@@ -103,7 +103,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Login ID is empty.");
         }
 
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
         return parent::rest_read($loginId, $parameters);
     }
 
@@ -136,7 +136,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $userId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -166,7 +166,7 @@ class UserLoginEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $userId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

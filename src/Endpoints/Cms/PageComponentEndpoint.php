@@ -13,7 +13,7 @@ class PageComponentEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "cms/pages_components";
+    protected $resourcePath = "cms/pages/{pageId}/components";
 
     /**
      * @inheritDoc
@@ -70,7 +70,7 @@ class PageComponentEndpoint extends CollectionEndpointAbstract
      */
     public function listForId(int $pageId, array $parameters = [])
     {
-        $this->parentId = $pageId;
+        $this->setPathVariables(['pageId' => $pageId]);
 
         return parent::rest_list(null, null, $parameters);
     }
@@ -86,7 +86,7 @@ class PageComponentEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $pageId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $pageId;
+        $this->setPathVariables(['pageId' => $pageId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

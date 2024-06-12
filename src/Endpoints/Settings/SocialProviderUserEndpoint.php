@@ -14,7 +14,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "settings/socialproviders_users";
+    protected $resourcePath = "settings/socialproviders/{providerId}/users";
 
     /**
      * @inheritDoc
@@ -78,7 +78,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
             throw new ApiException("User ID is empty.");
         }
 
-        $this->parentId = $providerId;
+        $this->setPathVariables(['providerId' => $providerId]);
         return parent::rest_update($userId, $data);
     }
 
@@ -125,7 +125,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
             'code' => $code
         ]);
 
-        $this->parentId = $providerId;
+        $this->setPathVariables(['providerId' => $providerId]);
         return parent::rest_read('token', $parameters);
     }
 
@@ -168,7 +168,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
             throw new ApiException("User ID is empty.");
         }
 
-        $this->parentId = $providerId;
+        $this->setPathVariables(['providerId' => $providerId]);
         return parent::rest_read($userId, $parameters);
     }
 
@@ -201,7 +201,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $providerId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $providerId;
+        $this->setPathVariables(['providerId' => $providerId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -231,7 +231,7 @@ class SocialProviderUserEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $providerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $providerId;
+        $this->setPathVariables(['providerId' => $providerId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

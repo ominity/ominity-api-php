@@ -14,7 +14,7 @@ class CustomerSubscriptionEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/customers_subscriptions";
+    protected $resourcePath = "commerce/customers/{customerId}/subscriptions";
 
     /**
      * @inheritDoc
@@ -77,7 +77,7 @@ class CustomerSubscriptionEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Subscription ID is empty.");
         }
 
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
         return parent::rest_update($subscriptionId, $data);
     }
 
@@ -120,7 +120,7 @@ class CustomerSubscriptionEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Subscription ID is empty.");
         }
 
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
         return parent::rest_read($subscriptionId, $parameters);
     }
 
@@ -153,7 +153,7 @@ class CustomerSubscriptionEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $customerId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -211,7 +211,7 @@ class CustomerSubscriptionEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $customerId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $customerId;
+        $this->setPathVariables(['customerId' => $customerId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

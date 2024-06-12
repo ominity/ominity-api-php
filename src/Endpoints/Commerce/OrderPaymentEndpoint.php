@@ -5,7 +5,6 @@ namespace Ominity\Api\Endpoints\Commerce;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\Resources\Commerce\Customer;
 use Ominity\Api\Resources\Commerce\Order;
 use Ominity\Api\Resources\Commerce\Payment;
 use Ominity\Api\Resources\Commerce\PaymentCollection;
@@ -15,7 +14,7 @@ class OrderPaymentEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "commerce/orders_payments";
+    protected $resourcePath = "commerce/orders/{orderId}/payments";
 
     /**
      * @inheritDoc
@@ -60,7 +59,7 @@ class OrderPaymentEndpoint extends CollectionEndpointAbstract
      */
     public function createForId($orderId, array $data, array $filters = [])
     {
-        $this->parentId = $orderId;
+        $this->setPathVariables(['orderId' => $orderId]);
 
         return parent::rest_create($data, $filters);
     }
@@ -104,7 +103,7 @@ class OrderPaymentEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Payment ID is empty.");
         }
 
-        $this->parentId = $orderId;
+        $this->setPathVariables(['orderId' => $orderId]);
         return parent::rest_read($paymentId, $parameters);
     }
 
@@ -137,7 +136,7 @@ class OrderPaymentEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $orderId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $orderId;
+        $this->setPathVariables(['orderId' => $orderId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -195,7 +194,7 @@ class OrderPaymentEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $orderId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $orderId;
+        $this->setPathVariables(['orderId' => $orderId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }

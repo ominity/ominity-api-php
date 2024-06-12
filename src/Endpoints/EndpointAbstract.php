@@ -26,9 +26,9 @@ abstract class EndpointAbstract
     protected $resourcePath;
 
     /**
-     * @var string|null
+     * @var array
      */
-    protected $parentId;
+    protected $pathVariables = [];
 
     /**
      * @param OminityApiClient $api
@@ -177,22 +177,33 @@ abstract class EndpointAbstract
     }
 
     /**
+     * @param array $pathVariables
+     */
+    public function setPathVariables(array $pathVariables)
+    {
+        $this->pathVariables = $pathVariables;
+    }
+
+    /**
      * @return string
      * @throws ApiException
      */
     public function getResourcePath()
     {
-        if (strpos($this->resourcePath, "_") !== false) {
-            [$parentResource, $childResource] = explode("_", $this->resourcePath, 2);
+        $path = $this->resourcePath;
 
-            if (empty($this->parentId)) {
-                throw new ApiException("Subresource '{$this->resourcePath}' used without parent '$parentResource' ID.");
+        foreach ($this->pathVariables as $key => $value) {
+            if (empty($value)) {
+                throw new ApiException("Path variable '$key' is empty.");
             }
-
-            return "$parentResource/{$this->parentId}/$childResource";
+            $path = str_replace('{' . $key . '}', urlencode($value), $path);
         }
 
-        return $this->resourcePath;
+        if (preg_match('/\{[^\}]+\}/', $path)) {
+            throw new ApiException("Not all path variables are replaced in the resource path: $path.");
+        }
+
+        return $path;
     }
 
     /**

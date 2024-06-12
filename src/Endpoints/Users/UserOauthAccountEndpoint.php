@@ -14,7 +14,7 @@ class UserOauthAccountEndpoint extends CollectionEndpointAbstract
     /**
      * @var string
      */
-    protected $resourcePath = "users_oauthaccounts";
+    protected $resourcePath = "users{userId}/oauthaccounts";
 
     /**
      * @inheritDoc
@@ -71,7 +71,7 @@ class UserOauthAccountEndpoint extends CollectionEndpointAbstract
             throw new ApiException("Account ID is empty.");
         }
 
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
         return parent::rest_read($accountId, $parameters);
     }
 
@@ -104,7 +104,7 @@ class UserOauthAccountEndpoint extends CollectionEndpointAbstract
      */
     public function pageForId(int $userId, $page = null, $limit = null, array $parameters = [])
     {
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
 
         return parent::rest_list($page, $limit, $parameters);
     }
@@ -162,7 +162,7 @@ class UserOauthAccountEndpoint extends CollectionEndpointAbstract
      */
     public function iteratorForId(int $userId, array $parameters = [], bool $iterateBackwards = false): LazyCollection
     {
-        $this->parentId = $userId;
+        $this->setPathVariables(['userId' => $userId]);
 
         return $this->rest_iterator(null, null, $parameters, $iterateBackwards);
     }
