@@ -5,6 +5,7 @@ namespace Ominity\Api\Endpoints\Commerce;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\Commerce\Customer;
 use Ominity\Api\Resources\Commerce\Subscription;
 use Ominity\Api\Resources\Commerce\SubscriptionCollection;
@@ -15,6 +16,20 @@ class CustomerSubscriptionEndpoint extends CollectionEndpointAbstract
      * @var string
      */
     protected $resourcePath = "commerce/customers/{customerId}/subscriptions";
+
+    /**
+     * RESTful subscription transition resource.
+     *
+     * @var CustomerSubscirptionTransitionEndpoint
+     */
+    public CustomerSubscirptionTransitionEndpoint $transition;
+
+    public function __construct(OminityApiClient $client)
+    {
+        parent::__construct($client);
+        
+        $this->transition = new CustomerSubscirptionTransitionEndpoint($client);
+    }
 
     /**
      * @inheritDoc
