@@ -33,6 +33,65 @@ class CustomerSubscirptionTransitionEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Get the transition product for a specific Subscirption.
+     *
+     * The product offers will have the prorata parameter available 
+     * in the price field.
+     * 
+     * @param Customer $customer
+     * @param Subscription $subscription
+     * @param int $productId
+     * @return Product
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function getFor(Customer $customer, Subscription $subscription, int $productId, array $parameters = []) {
+        if (empty($customer)) {
+            throw new ApiException("Customer is empty.");
+        }
+
+        if (empty($subscription)) {
+            throw new ApiException("Subscription is empty.");
+        }
+
+        if (empty($productId)) {
+            throw new ApiException("Product ID is empty.");
+        }
+
+        return $this->getForId($customer->id, $subscription->id, $productId, $parameters);
+    }
+
+    /**
+     * Get the transition product for a specific Subscirption ID.
+     * 
+     * The product offers will have the prorata parameter available 
+     * in the price field.
+     *
+     * @param int $customerId
+     * @param int $subscriptionId
+     * @param int $productId
+     * @return Product
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function getForId(int $customerId, int $subscriptionId, int $productId, array $parameters = []) {
+        if (empty($customerId)) {
+            throw new ApiException("Customer ID is empty.");
+        }
+
+        if (empty($subscriptionId)) {
+            throw new ApiException("Subscription ID is empty.");
+        }
+
+        if (empty($productId)) {
+            throw new ApiException("Product ID is empty.");
+        }
+
+        $this->setPathVariables(['customerId' => $customerId, 'subscriptionId' => $subscriptionId]);
+        return parent::rest_read($productId, $parameters);
+    }
+
+    /**
      * Get all transition product options for a Subscription.
      *
      * @param array $parameters
