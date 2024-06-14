@@ -90,6 +90,13 @@ class Order extends BaseResource
      */
     public $totalAmount;
 
+    /**
+     * Amount paid object containing the value and currency
+     *
+     * @var \stdClass
+     */
+    public $amountPaid;
+
     /** 
      * UTC datetime the order was completed in ISO-8601 format.
      *
