@@ -31,4 +31,22 @@ abstract class BaseCollection extends \ArrayObject
      * @return string|null
      */
     abstract public function getCollectionResourceName();
+
+    /**
+     * Get the first item in the collection.
+     * 
+     * @return string|null
+     */
+    public function first() {
+        return $this->offsetGet(0);
+    }
+
+    /**
+     * Get the last item in the collection.
+     * 
+     * @return string|null
+     */
+    public function last() {
+        return $this->offsetGet($this->count - 1);
+    }
 }
