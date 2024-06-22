@@ -21,6 +21,13 @@ class CmsEndpointCollection extends EndpointCollectionAbstract
     public $layouts;
 
     /**
+     * RESTful Menu resource.
+     *
+     * @var MenuEndpoint
+     */
+    public $menus;
+
+    /**
      * RESTful Page resource.
      *
      * @var PageEndpoint
@@ -45,6 +52,7 @@ class CmsEndpointCollection extends EndpointCollectionAbstract
     {
         $this->components = new ComponentEndpoint($this->client);
         $this->layouts = new LayoutEndpoint($this->client);
+        $this->menus = new MenuEndpoint($this->client);
         $this->pages = new PageEndpoint($this->client);
         $this->pageComponents = new PageComponentEndpoint($this->client);
         $this->routes = new RouteEndpoint($this->client);
