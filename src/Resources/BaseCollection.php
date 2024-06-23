@@ -35,7 +35,7 @@ abstract class BaseCollection extends \ArrayObject
     /**
      * Get the first item in the collection.
      * 
-     * @return string|null
+     * @return mixed
      */
     public function first() {
         return $this->offsetGet(0);
@@ -44,7 +44,7 @@ abstract class BaseCollection extends \ArrayObject
     /**
      * Get the last item in the collection.
      * 
-     * @return string|null
+     * @return mixed
      */
     public function last() {
         return $this->offsetGet($this->count - 1);
