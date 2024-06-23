@@ -14,32 +14,18 @@ class Route extends BaseResource
     public $resource;
 
     /**
-     * Id of the route.
-     *
-     * @var int
-     */
-    public $id;
-
-    /**
-     * Related object type.
+     * Name of the route.
      *
      * @var string
      */
-    public $relation;
+    public $name;
 
     /**
-     * Identifier of the related object.
-     *
-     * @var string|int
-     */
-    public $relationId;
-
-    /**
-     * List of slugs for all available locales.
+     * Available parameters of the route.
      *
      * @var \stdClass
      */
-    public $slugs;
+    public $parameters;
 
     /**
      * @var \stdClass
