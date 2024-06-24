@@ -29,11 +29,26 @@ class Page extends BaseResource
     public $name;
 
     /**
+     * Slug of the page.
+     *
+     * @var string
+     */
+    public $slug;
+
+    /**
      * Page meta data for SEO puposes.
      *
      * @var \stdClass
      */
     public $meta;
+
+    /**
+     * Get list of all routes for this page. 
+     * It has a locale as key and the route as value.
+     *
+     * @var \stdClass
+     */
+    public $routes;
 
     /**
      * The ID of the layout for this page.
@@ -118,5 +133,18 @@ class Page extends BaseResource
     public function components() 
     {
         return $this->client->cms->pageComponents->listFor($this);
+    }
+
+    /**
+     * Get the route for a specific locale
+     * 
+     * @param string $locale
+     * @return Route|null
+     */
+    public function getRoute($locale) {
+        return ResourceFactory::createFromApiResult(
+            $this->routes->{$locale} ?? null,
+            new Route($this->client)
+        );
     }
 }
