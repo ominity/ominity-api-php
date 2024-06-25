@@ -18,13 +18,13 @@ class OrderLineCollection extends BaseCollection
      * Get a specific order line.
      * Returns null if the order line cannot be found.
      *
-     * @param  string $lineId
+     * @param  int $lineId
      * @return OrderLine|null
      */
     public function get($lineId)
     {
         foreach ($this as $line) {
-            if ($line->id === $lineId) {
+            if ($line->id == $lineId) {
                 return $line;
             }
         }

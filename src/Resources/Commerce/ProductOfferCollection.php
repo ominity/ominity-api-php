@@ -26,7 +26,7 @@ class ProductOfferCollection extends BaseCollection
     public function get($productOfferId)
     {
         foreach ($this as $productOffer) {
-            if ($productOffer->id === $productOfferId) {
+            if ($productOffer->id == $productOfferId) {
                 return $productOffer;
             }
         }
@@ -51,8 +51,8 @@ class ProductOfferCollection extends BaseCollection
 
         $bestMatchOffer = null;
         foreach($this as $productOffer) {
-            if ($productOffer->type === $type && $productOffer->quantity <= $quantity) {
-                if($intervalId === null || $productOffer->intervalId === $intervalId) {
+            if ($productOffer->type == $type && $productOffer->quantity <= $quantity) {
+                if($intervalId === null || $productOffer->intervalId == $intervalId) {
                     if ($bestMatchOffer === null || $productOffer->quantity > $bestMatchOffer->quantity) {
                         $bestMatchOffer = $productOffer;
                     }

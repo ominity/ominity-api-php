@@ -24,7 +24,7 @@ class AddressCollection extends BaseCollection
     public function get($addressId)
     {
         foreach ($this as $address) {
-            if ($address->id === $addressId) {
+            if ($address->id == $addressId) {
                 return $address;
             }
         }

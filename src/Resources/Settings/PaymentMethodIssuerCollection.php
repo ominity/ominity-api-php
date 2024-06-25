@@ -15,16 +15,16 @@ class PaymentMethodIssuerCollection extends BaseCollection
     }
 
     /**
-     * Get a specific order line.
-     * Returns null if the order line cannot be found.
+     * Get a specific payment methods issuer.
+     * Returns null if the paument method issuer cannot be found.
      *
-     * @param  string $lineId
+     * @param  int $issuerId
      * @return PaymentMethodIssuer|null
      */
-    public function get($lineId)
+    public function get($issuerId)
     {
         foreach ($this as $line) {
-            if ($line->id === $lineId) {
+            if ($line->id == $issuerId) {
                 return $line;
             }
         }

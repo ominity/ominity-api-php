@@ -24,7 +24,7 @@ class PageComponentCollection extends BaseCollection
     public function get($pageComponentId)
     {
         foreach ($this as $pageComponent) {
-            if ($pageComponent->id === $pageComponentId) {
+            if ($pageComponent->id == $pageComponentId) {
                 return $pageComponent;
             }
         }

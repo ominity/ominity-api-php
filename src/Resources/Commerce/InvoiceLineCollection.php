@@ -18,13 +18,13 @@ class InvoiceLineCollection extends BaseCollection
      * Get a specific invoice line.
      * Returns null if the invoice line cannot be found.
      *
-     * @param  string $lineId
+     * @param  int $lineId
      * @return InvoiceLine|null
      */
     public function get($lineId)
     {
         foreach ($this as $line) {
-            if ($line->id === $lineId) {
+            if ($line->id == $lineId) {
                 return $line;
             }
         }

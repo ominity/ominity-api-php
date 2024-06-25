@@ -18,13 +18,13 @@ class ComponentFieldCollection extends BaseCollection
      * Get a specific component field.
      * Returns null if the order line cannot be found.
      *
-     * @param  string $fieldId
+     * @param  int $fieldId
      * @return ComponentField|null
      */
     public function get($fieldId)
     {
         foreach ($this as $field) {
-            if ($field->id === $fieldId) {
+            if ($field->id == $fieldId) {
                 return $field;
             }
         }

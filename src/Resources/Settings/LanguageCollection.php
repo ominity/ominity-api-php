@@ -25,7 +25,7 @@ class LanguageCollection extends BaseCollection
     public function get($languageCode)
     {
         foreach ($this as $language) {
-            if ($language->code === $languageCode) {
+            if ($language->code == $languageCode) {
                 return $language;
             }
         }
