@@ -135,6 +135,15 @@ class Customer extends BaseResource
     }
 
     /**
+     * Check if the customer has a valid billing address
+     * 
+     * @return bool
+     */
+    public function hasValidBillingAddress() {
+        return isset($this->billingAddress) && !empty($this->billingAddress->street) && !empty($this->billingAddress->city) && !empty($this->billingAddress->postalCode) && !empty($this->billingAddress->country);
+    }
+
+    /**
      * Get shipping address
      * 
      * @return Address|null
@@ -148,6 +157,15 @@ class Customer extends BaseResource
             $this->shippingAddress, 
             new Address($this->client)
         );
+    }
+
+    /**
+     * Check if the customer has a valid shipping address
+     * 
+     * @return bool
+     */
+    public function hasValidShippingAddress() {
+        return isset($this->shippingAddress) && !empty($this->shippingAddress->street) && !empty($this->shippingAddress->city) && !empty($this->shippingAddress->postalCode) && !empty($this->shippingAddress->country);
     }
 
     /**
@@ -245,12 +263,20 @@ class Customer extends BaseResource
     }
 
     /**
-     * Get shipping address
+     * Get all users for the customer
      * 
      * @return CustomerUserCollection
      * @throws ApiException
      */
     public function users() {
+        if(isset($this->_embedded->users)) {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                User::class,
+                $this->_embedded->users
+            );
+        }
+
         return $this->client->commerce->customers->users->allFor($this);
     }
 
