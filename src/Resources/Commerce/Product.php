@@ -170,6 +170,15 @@ class Product extends BaseResource
     }
 
     /**
+     * Is this product free?
+     *
+     * @return bool
+     */
+    public function isFree() {
+        return $this->offers()->count === 0;
+    }
+
+    /**
      * Is this page published?
      *
      * @return bool

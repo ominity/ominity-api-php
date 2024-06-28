@@ -90,6 +90,13 @@ class Order extends BaseResource
      */
     public $totalAmount;
 
+     /**
+     * VAT amount object containing the value and currency
+     *
+     * @var \stdClass
+     */
+    public $vatAmount;
+
     /**
      * Amount paid object containing the value and currency
      *
