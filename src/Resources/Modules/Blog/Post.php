@@ -87,6 +87,13 @@ class Post extends BaseResource
     public $publisherId;
 
     /**
+     * Time to read the blog post in minutes.
+     *
+     * @var int
+     */
+    public $timeToRead;
+
+    /**
      * SEO tags of the blog post.
      * Container Meta and OG page tags.
      * 
@@ -178,5 +185,42 @@ class Post extends BaseResource
             $this->routes->{$locale} ?? null,
             new Route($this->client)
         );
+    }
+
+    /**
+     * Get the category related to this blog post.
+     *
+     * @return Category
+     */
+    public function category()
+    {
+        if (isset($this->_embedded, $this->_embedded->category)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->category,
+                new Category($this->client)
+            );
+        }
+
+        return $this->client->modules->blog->categories->get($this->categoryId);
+    }
+
+    /**
+     * Get tags related to this blog post.
+     *
+     * @return TagCollection
+     */
+    public function tags()
+    {
+        if (isset($this->_embedded, $this->_embedded->tags)) 
+        {
+            return ResourceFactory::createCursorResourceCollection(
+                $this->client,
+                $this->_embedded->tags,
+                Tag::class
+            );
+        }
+
+        return null;
     }
 }
