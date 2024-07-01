@@ -94,12 +94,11 @@ class Post extends BaseResource
     public $timeToRead;
 
     /**
-     * SEO tags of the blog post.
-     * Container Meta and OG page tags.
+     * Meta tags of the blog post.
      * 
      * @var \stdClass
      */
-    public $seo;
+    public $meta;
 
     /**
      * Get list of all routes for this page. 
