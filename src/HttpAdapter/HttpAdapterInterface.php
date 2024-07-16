@@ -11,7 +11,7 @@ interface HttpAdapterInterface
      * @param string $url
      * @param string|array $headers
      * @param string $httpBody
-     * @return \stdClass|null
+     * @return \stdClass|string|null
      * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function send($httpMethod, $url, $headers, $httpBody);

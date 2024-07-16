@@ -385,17 +385,18 @@ class OminityApiClient
      * @param string $httpMethod
      * @param string $apiMethod
      * @param string|null $httpBody
+     * @param string $accept
      *
      * @return \stdClass
      * @throws ApiException
      *
      * @codeCoverageIgnore
      */
-    public function performHttpCall($httpMethod, $apiMethod, $httpBody = null)
+    public function performHttpCall($httpMethod, $apiMethod, $httpBody = null, $accept = "application/json")
     {
         $url = $this->apiEndpoint . "/" . self::API_VERSION . "/" . $apiMethod;
 
-        return $this->performHttpCallToFullUrl($httpMethod, $url, $httpBody);
+        return $this->performHttpCallToFullUrl($httpMethod, $url, $httpBody, $accept);
     }
 
     /**
@@ -407,13 +408,14 @@ class OminityApiClient
      * @param string $httpMethod
      * @param string $url
      * @param string|null $httpBody
+     * @param string $accept
      *
-     * @return \stdClass|null
+     * @return \stdClass|string|null
      * @throws ApiException
      *
      * @codeCoverageIgnore
      */
-    public function performHttpCallToFullUrl($httpMethod, $url, $httpBody = null)
+    public function performHttpCallToFullUrl($httpMethod, $url, $httpBody = null, $accept = "application/json")
     {
         if (empty($this->apiKey)) {
             throw new ApiException("You have not set an API key or OAuth access token. Please use setApiKey() to set the API key.");
@@ -426,7 +428,7 @@ class OminityApiClient
         }
 
         $headers = [
-            'Accept' => "application/json",
+            'Accept' => $accept,
             'Authorization' => "Bearer {$this->apiKey}",
             'User-Agent' => $userAgent,
         ];

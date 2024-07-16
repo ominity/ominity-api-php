@@ -76,7 +76,7 @@ final class Guzzle6And7HttpAdapter implements HttpAdapterInterface
      * @param string $url
      * @param array $headers
      * @param string $httpBody
-     * @return \stdClass|null
+     * @return \stdClass|string|null
      * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function send($httpMethod, $url, $headers, $httpBody)
@@ -101,7 +101,7 @@ final class Guzzle6And7HttpAdapter implements HttpAdapterInterface
             throw new ApiException($e->getMessage(), $e->getCode(), null, $request, null);
         }
 
-        return $this->parseResponseBody($response);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -145,6 +145,29 @@ final class Guzzle6And7HttpAdapter implements HttpAdapterInterface
     public function disableDebugging()
     {
         $this->debugging = false;
+    }
+
+    /**
+     * Handle the response based on its Content-Type.
+     *
+     * @param ResponseInterface $response
+     * @return \stdClass|string|null
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    private function handleResponse(ResponseInterface $response)
+    {
+        $contentType = $response->getHeaderLine('Content-Type');
+
+        if (stripos($contentType, 'application/json') !== false || stripos($contentType, 'application/hal+json') !== false) {
+            return $this->parseResponseBody($response);
+        }
+
+        // For binary responses
+        if (stripos($contentType, 'application/pdf') !== false || stripos($contentType, 'application/octet-stream') !== false) {
+            return (string) $response->getBody();
+        }
+
+        throw new ApiException("Unsupported Content-Type: {$contentType}");
     }
 
     /**

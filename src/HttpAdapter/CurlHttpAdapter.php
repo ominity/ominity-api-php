@@ -119,9 +119,10 @@ final class CurlHttpAdapter implements HttpAdapterInterface
         }
 
         $statusCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        $contentType = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
         curl_close($curl);
 
-        return $this->parseResponseBody($response, $statusCode, $httpBody);
+        return $this->handleResponse($response, $statusCode, $contentType, $httpBody);
     }
 
     /**
@@ -173,6 +174,30 @@ final class CurlHttpAdapter implements HttpAdapterInterface
         }
 
         return false;
+    }
+
+    /**
+     * Handle the response based on its Content-Type.
+     *
+     * @param string $response
+     * @param int $statusCode
+     * @param string $contentType
+     * @param string|null $httpBody
+     * @return \stdClass|string|null
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    private function handleResponse($response, $statusCode, $contentType, $httpBody)
+    {
+        if (stripos($contentType, 'application/json') !== false || stripos($contentType, 'application/hal+json') !== false) {
+            return $this->parseResponseBody($response, $statusCode, $httpBody);
+        }
+
+        // For binary responses
+        if (stripos($contentType, 'application/pdf') !== false || stripos($contentType, 'application/octet-stream') !== false) {
+            return $response;
+        }
+
+        throw new ApiException("Unsupported Content-Type: {$contentType}");
     }
 
     /**

@@ -241,4 +241,13 @@ class Invoice extends BaseResource
             $this->lines
         );
     }
+
+    /**
+     * Get the invoice PDF
+     * 
+     * @return string
+     */
+    public function pdf() {
+        return $this->client->commerce->invoices->pdf($this->id);
+    }
 }

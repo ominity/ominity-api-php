@@ -52,6 +52,22 @@ class InvoiceEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Retrieve an invoice PDF from the API.
+     *
+     * Will throw a ApiException if the page id is invalid or the resource cannot be found.
+     *
+     * @param string $invoiceId
+     * @param array $parameters
+     *
+     * @return string
+     * @throws ApiException
+     */
+    public function pdf($invoiceId, array $parameters = [])
+    {
+        return $this->rest_download($invoiceId, $parameters, "application/pdf");
+    }
+
+    /**
      * Retrieves a collection of invoices from the API.
      *
      * @param string $page The page number to request

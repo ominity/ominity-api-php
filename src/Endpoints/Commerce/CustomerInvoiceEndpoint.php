@@ -76,6 +76,49 @@ class CustomerInvoiceEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Get the invoice PDF for a specific Customer.
+     *
+     * @param Customer $customer
+     * @param int $invoiceId
+     * @return string
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function pdfFor(Customer $customer, int $invoiceId, array $parameters = []) {
+        if (empty($customer)) {
+            throw new ApiException("Customer is empty.");
+        }
+
+        if (empty($invoiceId)) {
+            throw new ApiException("Invoice ID is empty.");
+        }
+
+        return $this->pdfForId($customer->id, $invoiceId, $parameters);
+    }
+
+    /**
+     * Get the invoice PDF for a specific Customer ID.
+     *
+     * @param int $customerId
+     * @param int $invoiceId
+     * @return string
+     *
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function pdfForId(int $customerId, int $invoiceId, array $parameters = []) {
+        if (empty($customerId)) {
+            throw new ApiException("Customer ID is empty.");
+        }
+
+        if (empty($invoiceId)) {
+            throw new ApiException("Invoice ID is empty.");
+        }
+
+        $this->setPathVariables(['customerId' => $customerId]);
+        return parent::rest_download($invoiceId, $parameters, "application/pdf");
+    }
+
+    /**
      * Retrieves a collection of invoices for a specific Customer.
      *
      * @param Customer $customer

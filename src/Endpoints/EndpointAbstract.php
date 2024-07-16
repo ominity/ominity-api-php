@@ -159,7 +159,32 @@ abstract class EndpointAbstract
         return ResourceFactory::createFromApiResult($result, $this->getResourceObject());
     }
 
+    /**
+     * Download a file stream from the API.
+     *
+     * @param string $id
+     * @param array $filters
+     * @param string $accept
+     *
+     * @return string
+     * @throws ApiException
+     */
+    protected function rest_download($id, array $filters = [], $accept = "application/pdf")
+    {
+        if (empty($id)) {
+            throw new ApiException("Invalid resource id.");
+        }
 
+        $id = urlencode($id);
+        $result = $this->client->performHttpCall(
+            self::REST_READ,
+            "{$this->getResourcePath()}/{$id}" . $this->buildQueryString($filters),
+            null,
+            $accept
+        );
+
+        return $result;
+    }
 
     /**
      * Get the object that is used by this API endpoint. Every API endpoint uses one type of object.
