@@ -3,6 +3,7 @@
 namespace Ominity\Api\Resources\Modules\Forms;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\ResourceFactory;
 
 class Form extends BaseResource
 {
@@ -85,5 +86,24 @@ class Form extends BaseResource
         $currentTimestamp = time();
 
         return $publishedTimestamp <= $currentTimestamp;
+    }
+
+    /**
+     * Get the form fields.
+     *
+     * @return FormFieldCollection
+     */
+    public function fields()
+    {
+        if (isset($this->_embedded, $this->_embedded->form_fields)) 
+        {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client, 
+                FormField::class, 
+                $this->_embedded->form_fields
+            );
+        }
+        
+        return $this->client->modules->forms->forms->fields->listForId($this->id);
     }
 }

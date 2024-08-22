@@ -4,6 +4,7 @@ namespace Ominity\Api\Endpoints\Modules\Forms;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Resources\Modules\Forms\Form;
 use Ominity\Api\Resources\Modules\Forms\FormCollection;
@@ -11,6 +12,20 @@ use Ominity\Api\Resources\Modules\Forms\FormCollection;
 class FormEndpoint extends CollectionEndpointAbstract
 {
     protected $resourcePath = "modules/forms";
+
+    /**
+     * RESTful FormField resource.
+     *
+     * @var FormFieldEndpoint
+     */
+    public FormFieldEndpoint $fields;
+
+    public function __construct(OminityApiClient $client)
+    {
+        parent::__construct($client);
+        
+        $this->fields = new FormFieldEndpoint($client);
+    }
 
     /**
      * Get the object that is used by this API. Every API uses one type of object.
