@@ -37,4 +37,6 @@ class FieldType
     public const FILE = 'file';
 
     public const METADATA = 'metadata';
+
+    public const HONEYPOT = 'honeypot';
 }

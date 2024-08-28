@@ -4,6 +4,7 @@ namespace Ominity\Api\Endpoints\Modules;
 
 use Ominity\Api\Endpoints\EndpointCollectionAbstract;
 use Ominity\Api\Endpoints\Modules\Blog\BlogEndpointCollection;
+use Ominity\Api\Endpoints\Modules\Bookings\BookingEndpoint;
 use Ominity\Api\Endpoints\Modules\Forms\FormsEndpointCollection;
 
 class ModulesEndpointCollection extends EndpointCollectionAbstract
@@ -16,6 +17,13 @@ class ModulesEndpointCollection extends EndpointCollectionAbstract
     public $blog;
 
     /**
+     * RESTful Bookings module endppoints.
+     *
+     * @var BookingEndpoint
+     */
+    public $bookings;
+
+    /**
      * RESTful Forms module endppoints.
      *
      * @var FormsEndpointCollection
@@ -25,6 +33,7 @@ class ModulesEndpointCollection extends EndpointCollectionAbstract
     public function initializeEndpoints()
     {
         $this->blog = new BlogEndpointCollection($this->client);
+        $this->bookings = new BookingEndpoint($this->client);
         $this->forms = new FormsEndpointCollection($this->client);
     }
 }
