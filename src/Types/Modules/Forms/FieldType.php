@@ -1,6 +1,6 @@
 <?php
 
-namespace Ominity\Api\Types\Modules\Blog;
+namespace Ominity\Api\Types\Modules\Forms;
 
 class FieldType
 {

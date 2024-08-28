@@ -56,6 +56,13 @@ class FormField extends BaseResource
     public $placeholder;
 
     /**
+     * The default value of the field.
+     *
+     * @var string|null
+     */
+    public $defaultValue;
+
+    /**
      * Helper of the field.
      *
      * @var string
