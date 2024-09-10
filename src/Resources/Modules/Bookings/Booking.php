@@ -66,6 +66,20 @@ class Booking extends BaseResource
      */
     public $status;
 
+    /**
+     * The number of participants in this booking.
+     *
+     * @var int
+     */
+    public $participantsCount;
+
+    /**
+     * The custom fields of the booking.
+     *
+     * @var \stdClass
+     */
+    public $customFields;
+
     /** 
      * UTC datetime the event was last updated in ISO-8601 format.
      *
@@ -137,6 +151,26 @@ class Booking extends BaseResource
     }
 
     /**
+     * Get the participants related to this booking.
+     *
+     * @return ParticipantCollection
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function participants()
+    {
+        if (isset($this->_embedded, $this->_embedded->participants)) 
+        {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client, 
+                Participant::class,
+                $this->_embedded->participants
+            );
+        }
+        
+        return $this->client->modules->bookings->participants->listForId($this->id);
+    }
+
+    /**
      * Is this booking still pending?
      *
      * @return bool
@@ -184,6 +218,16 @@ class Booking extends BaseResource
     public function isNoShow()
     {
         return $this->status === BookingStatus::NO_SHOW;
+    }
+
+    /**
+     * Is this booking pending reschedule?
+     *
+     * @return bool
+     */
+    public function isPendingReschedule()
+    {
+        return $this->status === BookingStatus::PENDING_RESCHEDULE;
     }
 
     /**

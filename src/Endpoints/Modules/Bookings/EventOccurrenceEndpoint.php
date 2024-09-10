@@ -7,7 +7,7 @@ use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Resources\Modules\Bookings\Event;
-use Ominity\Api\Resources\Modules\Bookings\EventOccurenceCollection;
+use Ominity\Api\Resources\Modules\Bookings\EventOccurrenceCollection;
 use Ominity\Api\Resources\Modules\Bookings\EventOccurrence;
 
 class EventOccurrenceEndpoint extends CollectionEndpointAbstract
@@ -22,7 +22,7 @@ class EventOccurrenceEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new EventOccurenceCollection($this->client, $count, $_links);
+        return new EventOccurrenceCollection($this->client, $count, $_links);
     }
 
     /**

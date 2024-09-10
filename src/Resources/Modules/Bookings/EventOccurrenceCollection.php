@@ -4,7 +4,7 @@ namespace Ominity\Api\Resources\Modules\Bookings;
 
 use Ominity\Api\Resources\PaginatedCollection;
 
-class EventOccurenceCollection extends PaginatedCollection
+class EventOccurrenceCollection extends PaginatedCollection
 {
     /**
      * @return string

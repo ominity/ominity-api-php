@@ -14,5 +14,7 @@ class BookingStatus
 
     public const NO_SHOW = 'no_show';
 
+    public const PENDING_RESCHEDULE = 'pending_reschedule';
+
     public const RESCHEDULED = 'rescheduled';
 }

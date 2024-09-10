@@ -52,4 +52,20 @@ class CalendarEndpoint extends CollectionEndpointAbstract
 
         return $this->rest_list(null, null, $parameters);
     }
+
+    /**
+     * Retrieve an Event Occurrence from the API.
+     *
+     * Will throw a ApiException if the page id is invalid or the resource cannot be found.
+     *
+     * @param string $occurrenceId
+     * @param array $parameters
+     *
+     * @return EventOccurrence
+     * @throws ApiException
+     */
+    public function getOccurrence($occurrenceId, array $parameters = [])
+    {
+        return $this->rest_read('occurrence/' . $occurrenceId, $parameters);
+    }
 }

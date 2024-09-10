@@ -11,7 +11,7 @@ class CalendarCollection extends BaseCollection
      */
     public function getCollectionResourceName()
     {
-        return null;
+        return "bookings_event_occurrences";
     }
 
     /**
