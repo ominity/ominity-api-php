@@ -29,13 +29,20 @@ class BookingEndpoint extends CollectionEndpointAbstract
     public EventEndpoint $events;
 
     /**
+     * RESTful Location resource.
+     *
+     * @var LocationEndpoint
+     */
+    public LocationEndpoint $locations;
+
+    /**
      * RESTful Participant resource.
      *
      * @var ParticipantEndpoint
      */
     public ParticipantEndpoint $participants;
 
-     /**
+    /**
      * RESTful RescheduleRequest resource.
      *
      * @var RescheduleRequestEndpoint
@@ -48,6 +55,7 @@ class BookingEndpoint extends CollectionEndpointAbstract
 
         $this->calendar = new CalendarEndpoint($client);
         $this->events = new EventEndpoint($client);
+        $this->locations = new LocationEndpoint($client);
         $this->participants = new ParticipantEndpoint($client);
         $this->rescheduleRequests = new RescheduleRequestEndpoint($client);
     }

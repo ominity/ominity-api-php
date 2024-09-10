@@ -3,6 +3,7 @@
 namespace Ominity\Api\Resources\Modules\Bookings;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\ResourceFactory;
 
 class Event extends BaseResource
 {
@@ -108,5 +109,22 @@ class Event extends BaseResource
         return null;
     }
 
+    /**
+     * Get the location where the event is held.
+     * 
+     * @return Location
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function location()
+    {
+        if (isset($this->_embedded, $this->_embedded->location)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->location,
+                new Location($this->client)
+            );
+        }
 
+        return $this->client->modules->bookings->locations->get($this->locationId);
+    }
 }
