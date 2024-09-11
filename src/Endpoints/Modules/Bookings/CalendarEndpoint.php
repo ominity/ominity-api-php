@@ -5,6 +5,7 @@ namespace Ominity\Api\Endpoints\Modules\Bookings;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Resources\Modules\Bookings\CalendarCollection;
 use Ominity\Api\Resources\Modules\Bookings\EventOccurrence;
+use Ominity\Api\Resources\ResourceFactory;
 
 class CalendarEndpoint extends CollectionEndpointAbstract
 {
@@ -66,6 +67,10 @@ class CalendarEndpoint extends CollectionEndpointAbstract
      */
     public function getOccurrence($occurrenceId, array $parameters = [])
     {
-        return $this->rest_read('occurrence/' . $occurrenceId, $parameters);
+        $resource = "{$this->getResourcePath()}/occurrence/" . urlencode($occurrenceId)  . $this->buildQueryString($parameters);
+        
+        $result = $this->client->performHttpCall(self::REST_READ, $resource);
+        
+        return ResourceFactory::createFromApiResult($result, new EventOccurrence($this->client));
     }
 }
