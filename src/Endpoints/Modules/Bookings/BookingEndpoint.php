@@ -3,6 +3,7 @@
 namespace Ominity\Api\Endpoints\Modules\Bookings;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
+use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Resources\Modules\Bookings\Booking;
@@ -95,6 +96,25 @@ class BookingEndpoint extends CollectionEndpointAbstract
     public function create(array $data = [], array $filters = [])
     {
         return $this->rest_create($data, $filters);
+    }
+
+    /**
+     * Update a specific Booking resource
+     *
+     * Will throw a ApiException if the booking id is invalid or the resource cannot be found.
+     *
+     * @param int $bookingId
+     * @param array $data
+     * @return Booking
+     * @throws ApiException
+     */
+    public function update($bookingId, array $data = [])
+    {
+        if (empty($bookingId)) {
+            throw new ApiException("Invalid booking ID.");
+        }
+
+        return parent::rest_update($bookingId, $data);
     }
 
     /**

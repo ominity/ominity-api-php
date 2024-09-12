@@ -239,4 +239,22 @@ class Booking extends BaseResource
     {
         return $this->status === BookingStatus::RESCHEDULED;
     }
+
+    /**
+     * Saves the bookings's updated details.
+     *
+     * @return Booking
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function update()
+    {
+        $body = [
+            "customerId" => $this->customerId,
+            "eventOccurenceId" => $this->eventOccurenceId,
+            "status" => $this->status,
+            "customFields" => $this->customFields
+        ];
+
+        return $this->client->modules->bookings->update($this->id, $body);
+    }
 }
