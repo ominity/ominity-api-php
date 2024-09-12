@@ -281,9 +281,9 @@ class Customer extends BaseResource
     }
 
     /**
-     * Saves the user's updated details.
+     * Saves the customer's updated details.
      *
-     * @return User
+     * @return Customer
      * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function update()
@@ -296,8 +296,6 @@ class Customer extends BaseResource
             "ownerId" => $this->ownerId,
         ];
 
-        $result = $this->client->commerce->customers->update($this->id, $body);
-
-        return ResourceFactory::createFromApiResult($result, new Customer($this->client));
+        return $this->client->commerce->customers->update($this->id, $body);
     }
 }
