@@ -84,6 +84,20 @@ class BookingEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Creates a booking in Ominity.
+     *
+     * @param array $data An array containing details of the booking.
+     * @param array $filters
+     *
+     * @return Booking
+     * @throws ApiException
+     */
+    public function create(array $data = [], array $filters = [])
+    {
+        return $this->rest_create($data, $filters);
+    }
+
+    /**
      * Retrieve an Booking from the API.
      *
      * Will throw a ApiException if the page id is invalid or the resource cannot be found.
