@@ -25,6 +25,13 @@ class Booking extends BaseResource
     public $id;
 
     /**
+     * The booking number.
+     *
+     * @var string
+     */
+    public $number;
+
+    /**
      * The ID of the order this booking belongs to.
      *
      * @var int
