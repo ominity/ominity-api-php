@@ -29,6 +29,13 @@ class EventOccurrence extends BaseResource
     public $eventId;
 
     /**
+     * Id of the location where the occurrence is held.
+     *
+     * @var int
+     */
+    public $locationId;
+
+    /**
      * Status of the event occurrence.
      *
      * @var string
@@ -105,5 +112,24 @@ class EventOccurrence extends BaseResource
         }
 
         return $this->client->modules->bookings->events->get($this->eventId);
+    }
+
+    /**
+     * Get the location where the event occurrence is held.
+     * 
+     * @return Location
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function location()
+    {
+        if (isset($this->_embedded, $this->_embedded->location)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->location,
+                new Location($this->client)
+            );
+        }
+
+        return $this->client->modules->bookings->locations->get($this->locationId);
     }
 }

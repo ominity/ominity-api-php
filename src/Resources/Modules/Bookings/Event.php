@@ -22,6 +22,13 @@ class Event extends BaseResource
     public $id;
 
     /**
+     * Type of the event.
+     *
+     * @var string
+     */
+    public $type;
+
+    /**
      * Id of the location where the event is held.
      *
      * @var int
