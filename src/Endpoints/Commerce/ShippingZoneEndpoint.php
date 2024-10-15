@@ -4,28 +4,13 @@ namespace Ominity\Api\Endpoints\Commerce;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\OminityApiClient;
-use Ominity\Api\Resources\Commerce\Order;
-use Ominity\Api\Resources\Commerce\OrderCollection;
+use Ominity\Api\Resources\Commerce\ShippingZone;
+use Ominity\Api\Resources\Commerce\ShippingZoneCollection;
 use Ominity\Api\Resources\LazyCollection;
 
-class OrderEndpoint extends CollectionEndpointAbstract
+class ShippingZoneEndpoint extends CollectionEndpointAbstract
 {
-    protected $resourcePath = "commerce/orders";
-
-    /**
-     * RESTful Payment resource.
-     *
-     * @var OrderPaymentEndpoint
-     */
-    public OrderPaymentEndpoint $payments;
-
-    public function __construct(OminityApiClient $client)
-    {
-        parent::__construct($client);
-        
-        $this->payments = new OrderPaymentEndpoint($client);
-    }
+    protected $resourcePath = "commerce/shipping-zones";
 
     /**
      * Get the object that is used by this API. Every API uses one type of object.
@@ -34,7 +19,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceObject()
     {
-        return new Order($this->client);
+        return new ShippingZone($this->client);
     }
 
     /**
@@ -47,47 +32,33 @@ class OrderEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new OrderCollection($this->client, $count, $_links);
+        return new ShippingZoneCollection($this->client, $count, $_links);
     }
 
     /**
-     * Create a new order.
+     * Retrieve an shipping zone from the API.
      *
-     * @param array $data
-     * @param array $filters
+     * Will throw a ApiException if the shipping zone id is invalid or the resource cannot be found.
      *
-     * @return Order
-     * @throws \Ominity\Api\Exceptions\ApiException
-     */
-    public function create(array $data, array $filters = [])
-    {
-        return parent::rest_create($data, $filters);
-    }
-
-    /**
-     * Retrieve an order from the API.
-     *
-     * Will throw a ApiException if the page id is invalid or the resource cannot be found.
-     *
-     * @param string $orderId
+     * @param int $shippingZoneId
      * @param array $parameters
      *
-     * @return Order
+     * @return ShippingZone
      * @throws ApiException
      */
-    public function get($orderId, array $parameters = [])
+    public function get($shippingZoneId, array $parameters = [])
     {
-        return $this->rest_read($orderId, $parameters);
+        return $this->rest_read($shippingZoneId, $parameters);
     }
 
     /**
-     * Retrieves a collection of orders from the API.
+     * Retrieves a collection of shipping zones from the API.
      *
-     * @param string $page The page number to request
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      *
-     * @return OrderCollection
+     * @return ShippingZoneCollection
      * @throws ApiException
      */
     public function page($page = null, $limit = null, array $parameters = [])
@@ -100,7 +71,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
      *
      * @param array $parameters
      *
-     * @return OrderCollection
+     * @return ShippingZoneCollection
      * @throws ApiException
      */
     public function all(array $parameters = [])

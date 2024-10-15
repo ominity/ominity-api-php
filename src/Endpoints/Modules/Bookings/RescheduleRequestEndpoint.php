@@ -4,7 +4,6 @@ namespace Ominity\Api\Endpoints\Modules\Bookings;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Resources\LazyCollection;
-use Ominity\Api\Resources\Modules\Bookings\BookingReschedule;
 use Ominity\Api\Resources\Modules\Bookings\RescheduleRequest;
 use Ominity\Api\Resources\Modules\Bookings\RescheduleRequestCollection;
 use Ominity\Api\Resources\ResourceFactory;
@@ -44,7 +43,7 @@ class RescheduleRequestEndpoint extends CollectionEndpointAbstract
      * @param int $requestId
      * @param array $parameters
      *
-     * @return BookingReschedule
+     * @return RescheduleRequest
      * @throws ApiException
      */
     public function get($requestId, array $parameters = [])
@@ -60,7 +59,7 @@ class RescheduleRequestEndpoint extends CollectionEndpointAbstract
      * @param string $token
      * @param array $parameters
      *
-     * @return BookingReschedule
+     * @return RescheduleRequest
      * @throws ApiException
      */
     public function getByToken($token, array $parameters = [])

@@ -4,28 +4,13 @@ namespace Ominity\Api\Endpoints\Commerce;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\OminityApiClient;
-use Ominity\Api\Resources\Commerce\Order;
-use Ominity\Api\Resources\Commerce\OrderCollection;
+use Ominity\Api\Resources\Commerce\ShippingClass;
+use Ominity\Api\Resources\Commerce\ShippingClassCollection;
 use Ominity\Api\Resources\LazyCollection;
 
-class OrderEndpoint extends CollectionEndpointAbstract
+class ShippingClassEndpoint extends CollectionEndpointAbstract
 {
-    protected $resourcePath = "commerce/orders";
-
-    /**
-     * RESTful Payment resource.
-     *
-     * @var OrderPaymentEndpoint
-     */
-    public OrderPaymentEndpoint $payments;
-
-    public function __construct(OminityApiClient $client)
-    {
-        parent::__construct($client);
-        
-        $this->payments = new OrderPaymentEndpoint($client);
-    }
+    protected $resourcePath = "commerce/shipping-classes";
 
     /**
      * Get the object that is used by this API. Every API uses one type of object.
@@ -34,7 +19,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceObject()
     {
-        return new Order($this->client);
+        return new ShippingClass($this->client);
     }
 
     /**
@@ -47,47 +32,33 @@ class OrderEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new OrderCollection($this->client, $count, $_links);
+        return new ShippingClassCollection($this->client, $count, $_links);
     }
 
     /**
-     * Create a new order.
+     * Retrieve an shipping class from the API.
      *
-     * @param array $data
-     * @param array $filters
+     * Will throw a ApiException if the shipping class id is invalid or the resource cannot be found.
      *
-     * @return Order
-     * @throws \Ominity\Api\Exceptions\ApiException
-     */
-    public function create(array $data, array $filters = [])
-    {
-        return parent::rest_create($data, $filters);
-    }
-
-    /**
-     * Retrieve an order from the API.
-     *
-     * Will throw a ApiException if the page id is invalid or the resource cannot be found.
-     *
-     * @param string $orderId
+     * @param int $shippingClassId
      * @param array $parameters
      *
-     * @return Order
+     * @return ShippingClass
      * @throws ApiException
      */
-    public function get($orderId, array $parameters = [])
+    public function get($shippingMethodId, array $parameters = [])
     {
-        return $this->rest_read($orderId, $parameters);
+        return $this->rest_read($shippingMethodId, $parameters);
     }
 
     /**
-     * Retrieves a collection of orders from the API.
+     * Retrieves a collection of shipping class from the API.
      *
-     * @param string $page The page number to request
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      *
-     * @return OrderCollection
+     * @return ShippingClassCollection
      * @throws ApiException
      */
     public function page($page = null, $limit = null, array $parameters = [])
@@ -100,7 +71,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
      *
      * @param array $parameters
      *
-     * @return OrderCollection
+     * @return ShippingClassCollection
      * @throws ApiException
      */
     public function all(array $parameters = [])
@@ -111,7 +82,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
     /**
      * Create an iterator for iterating over pages retrieved from the API.
      *
-     * @param string $page The page number to request
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      * @param bool $iterateBackwards Set to true for reverse order iteration (default is false).

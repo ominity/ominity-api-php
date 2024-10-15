@@ -217,4 +217,28 @@ class Product extends BaseResource
             $this->offers
         );
     }
+
+    /**
+     * Get the product groups for this product.
+     *
+     * @return ProductGroupCollection
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function groups()
+    {
+        if (isset($this->_embedded, $this->_embedded->product_groups)) 
+        {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client, 
+                ProductGroup::class,
+                $this->_embedded->product_groups
+            );
+        }
+        
+        return $this->client->commerce->productGroups->all([
+            'filter' => [
+                'product' => $this->id
+            ]
+        ]);
+    }
 }

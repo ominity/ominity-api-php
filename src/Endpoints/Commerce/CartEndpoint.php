@@ -5,26 +5,26 @@ namespace Ominity\Api\Endpoints\Commerce;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\OminityApiClient;
-use Ominity\Api\Resources\Commerce\Order;
-use Ominity\Api\Resources\Commerce\OrderCollection;
+use Ominity\Api\Resources\Commerce\Cart;
+use Ominity\Api\Resources\Commerce\CartCollection;
 use Ominity\Api\Resources\LazyCollection;
 
-class OrderEndpoint extends CollectionEndpointAbstract
+class CartEndpoint extends CollectionEndpointAbstract
 {
-    protected $resourcePath = "commerce/orders";
+    protected $resourcePath = "commerce/carts";
 
     /**
-     * RESTful Payment resource.
-     *
-     * @var OrderPaymentEndpoint
+     * RESTful CartItem resource.
+     * 
+     * @var CartItemEndpoint
      */
-    public OrderPaymentEndpoint $payments;
+    public CartItemEndpoint $items;
 
     public function __construct(OminityApiClient $client)
     {
         parent::__construct($client);
         
-        $this->payments = new OrderPaymentEndpoint($client);
+        $this->items = new CartItemEndpoint($client);
     }
 
     /**
@@ -34,7 +34,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceObject()
     {
-        return new Order($this->client);
+        return new Cart($this->client);
     }
 
     /**
@@ -47,16 +47,16 @@ class OrderEndpoint extends CollectionEndpointAbstract
      */
     protected function getResourceCollectionObject($count, $_links)
     {
-        return new OrderCollection($this->client, $count, $_links);
+        return new CartCollection($this->client, $count, $_links);
     }
 
     /**
-     * Create a new order.
+     * Create a new cart.
      *
      * @param array $data
      * @param array $filters
      *
-     * @return Order
+     * @return Cart
      * @throws \Ominity\Api\Exceptions\ApiException
      */
     public function create(array $data, array $filters = [])
@@ -65,29 +65,48 @@ class OrderEndpoint extends CollectionEndpointAbstract
     }
 
     /**
-     * Retrieve an order from the API.
+     * Update a specific Cart resource
      *
-     * Will throw a ApiException if the page id is invalid or the resource cannot be found.
+     * Will throw a ApiException if the cart id is invalid or the resource cannot be found.
      *
-     * @param string $orderId
-     * @param array $parameters
-     *
-     * @return Order
+     * @param string $cartId
+     * @param array $data
+     * @return Cart
      * @throws ApiException
      */
-    public function get($orderId, array $parameters = [])
+    public function update($cartId, array $data = [])
     {
-        return $this->rest_read($orderId, $parameters);
+        if (empty($cartId)) {
+            throw new ApiException("Invalid cart ID.");
+        }
+
+        return parent::rest_update($cartId, $data);
     }
 
     /**
-     * Retrieves a collection of orders from the API.
+     * Retrieve an cart from the API.
      *
-     * @param string $page The page number to request
+     * Will throw a ApiException if the cart id is invalid or the resource cannot be found.
+     *
+     * @param string $cartId
+     * @param array $parameters
+     *
+     * @return Cart
+     * @throws ApiException
+     */
+    public function get($cartId, array $parameters = [])
+    {
+        return $this->rest_read($cartId, $parameters);
+    }
+
+    /**
+     * Retrieves a collection of carts from the API.
+     *
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      *
-     * @return OrderCollection
+     * @return CartCollection
      * @throws ApiException
      */
     public function page($page = null, $limit = null, array $parameters = [])
@@ -100,7 +119,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
      *
      * @param array $parameters
      *
-     * @return OrderCollection
+     * @return CartCollection
      * @throws ApiException
      */
     public function all(array $parameters = [])
@@ -111,7 +130,7 @@ class OrderEndpoint extends CollectionEndpointAbstract
     /**
      * Create an iterator for iterating over pages retrieved from the API.
      *
-     * @param string $page The page number to request
+     * @param int $page The page number to request
      * @param int $limit
      * @param array $parameters
      * @param bool $iterateBackwards Set to true for reverse order iteration (default is false).
