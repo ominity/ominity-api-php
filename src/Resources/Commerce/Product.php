@@ -4,6 +4,7 @@ namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
+use Ominity\Api\Resources\Route;
 use Ominity\Api\Types\ProductType;
 
 class Product extends BaseResource
@@ -37,11 +38,32 @@ class Product extends BaseResource
     public $ean;
 
     /**
+     * MPN of the product.
+     *
+     * @var string
+     */
+    public $mpn;
+
+    /**
+     * ASIN of the product.
+     *
+     * @var string
+     */
+    public $asin;
+
+    /**
      * Type of the product.
      *
      * @var string|ProductType
      */
     public $type;
+
+    /**
+     * Category ID of the product.
+     *
+     * @var int|null
+     */
+    public $categoryId;
 
     /**
      * Title of the product.
@@ -100,11 +122,19 @@ class Product extends BaseResource
     public $additionalImages;
 
     /**
-     * Additional field values of the product.
+     * Get list of all routes for this product. 
+     * It has a locale as key and the route as value.
      *
      * @var \stdClass
      */
-    public $fields;
+    public $routes;
+
+    /**
+     * Custom field values of the product.
+     *
+     * @var \stdClass
+     */
+    public $customFields;
 
     /**
      * The offers for this product.
@@ -114,7 +144,7 @@ class Product extends BaseResource
     public $offers;
 
     /** 
-     * UTC datetime the page was published in ISO-8601 format.
+     * UTC datetime the product was published in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string|null
@@ -122,7 +152,7 @@ class Product extends BaseResource
     public $publishedAt;
 
     /** 
-     * UTC datetime the page was last updated in ISO-8601 format.
+     * UTC datetime the product was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -130,7 +160,7 @@ class Product extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the page was created in ISO-8601 format.
+     * UTC datetime the product was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -240,5 +270,42 @@ class Product extends BaseResource
                 'product' => $this->id
             ]
         ]);
+    }
+
+    /**
+     * Get the category of this product.
+     *
+     * @return Category|null
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function category()
+    {
+        if(empty($this->categoryId)) {
+            return null;
+        }
+
+        if (isset($this->_embedded, $this->_embedded->category)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->category,
+                new Category($this->client)
+            );
+        }
+        
+        return $this->client->commerce->categories->get($this->categoryId);
+    }
+
+    /**
+     * Get the route for a specific locale
+     * 
+     * @param string $locale
+     * @return Route|null
+     */
+    public function getRoute($locale)
+    {
+        return ResourceFactory::createFromApiResult(
+            $this->routes->{$locale} ?? null,
+            new Route($this->client)
+        );
     }
 }
