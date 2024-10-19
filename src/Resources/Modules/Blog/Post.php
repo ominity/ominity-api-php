@@ -4,6 +4,7 @@ namespace Ominity\Api\Resources\Modules\Blog;
 
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\Cms\Route;
+use Ominity\Api\Resources\Cms\RouteCollection;
 use Ominity\Api\Resources\ResourceFactory;
 use Ominity\Api\Types\Modules\Blog\PostStatus;
 
@@ -183,6 +184,20 @@ class Post extends BaseResource
         return ResourceFactory::createFromApiResult(
             $this->routes->{$locale} ?? null,
             new Route($this->client)
+        );
+    }
+
+    /**
+     * Get the routes for this post.
+     *
+     * @return RouteCollection
+     */
+    public function routes()
+    {
+        return ResourceFactory::createBaseResourceCollection(
+            $this->client,
+            Route::class,
+            array_values((array) $this->routes)
         );
     }
 

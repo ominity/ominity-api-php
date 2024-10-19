@@ -147,4 +147,18 @@ class Page extends BaseResource
             new Route($this->client)
         );
     }
+
+    /**
+     * Get the routes for this product.
+     *
+     * @return RouteCollection
+     */
+    public function routes()
+    {
+        return ResourceFactory::createBaseResourceCollection(
+            $this->client,
+            Route::class,
+            array_values((array) $this->routes)
+        );
+    }
 }

@@ -21,6 +21,13 @@ class Route extends BaseResource
     public $name;
 
     /**
+     * Locale of the route.
+     *
+     * @var string
+     */
+    public $locale;
+
+    /**
      * Available parameters of the route.
      *
      * @var \stdClass

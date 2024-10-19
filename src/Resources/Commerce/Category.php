@@ -3,8 +3,9 @@
 namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\Cms\Route;
+use Ominity\Api\Resources\Cms\RouteCollection;
 use Ominity\Api\Resources\ResourceFactory;
-use Ominity\Api\Resources\Route;
 
 class Category extends BaseResource
 {
@@ -28,6 +29,20 @@ class Category extends BaseResource
      * @var string
      */
     public $name;
+
+    /**
+     * Slug of the category.
+     *
+     * @var string
+     */
+    public $slug;
+
+    /**
+     * Full slug of the category.
+     *
+     * @var string
+     */
+    public $fullSlug;
 
     /**
      * Description of the category.
@@ -151,6 +166,20 @@ class Category extends BaseResource
         return ResourceFactory::createFromApiResult(
             $this->routes->{$locale} ?? null,
             new Route($this->client)
+        );
+    }
+
+    /**
+     * Get the routes for this category.
+     *
+     * @return RouteCollection
+     */
+    public function routes()
+    {
+        return ResourceFactory::createBaseResourceCollection(
+            $this->client,
+            Route::class,
+            array_values((array) $this->routes)
         );
     }
 }
