@@ -2,23 +2,51 @@
 
 namespace Ominity\Api\Resources\Cms;
 
-use Ominity\Api\Resources\PaginatedCollection;
+use Ominity\Api\Resources\BaseCollection;
 
-class RouteCollection extends PaginatedCollection
+class RouteCollection extends BaseCollection
 {
     /**
-     * @return string
+     * @return string|null
      */
     public function getCollectionResourceName()
     {
-        return "routes";
+        return 'routes';
     }
 
     /**
-     * @return BaseResource
+     * Get route by name, id, and optionally locale
+     *
+     * @param  string $name
+     * @param  string|int $id
+     * @param  string|null $locale
+     * @return Route|null
      */
-    protected function createResourceObject()
+    public function get($name, $id, $locale = null)
     {
-        return new Route($this->client);
+        foreach ($this as $route) {
+            if ($route->name == $name && $route->parameters->id == $id && ($locale === null || $route->locale == $locale)) {
+                return $route;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get route by locale
+     *
+     * @param  string $locale
+     * @return Route|null
+     */
+    public function getByLocale($locale)
+    {
+        foreach ($this as $route) {
+            if ($route->locale == $route) {
+                return $route;
+            }
+        }
+
+        return null;
     }
 }

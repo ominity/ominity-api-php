@@ -19,6 +19,13 @@ class CommerceEndpointCollection extends EndpointCollectionAbstract
      * @var CategoryEndpoint
      */
     public CategoryEndpoint $categories;
+
+    /**
+     * RESTful Currency resource.
+     *
+     * @var CurrencyEndpoint
+     */
+    public CurrencyEndpoint $currencies;
     
     /**
      * RESTful Customer resource.
@@ -108,6 +115,7 @@ class CommerceEndpointCollection extends EndpointCollectionAbstract
     {
         $this->carts = new CartEndpoint($this->client);
         $this->categories = new CategoryEndpoint($this->client);
+        $this->currencies = new CurrencyEndpoint($this->client);
         $this->customers = new CustomerEndpoint($this->client);
         $this->invoices = new InvoiceEndpoint($this->client);
         $this->orders = new OrderEndpoint($this->client);

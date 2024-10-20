@@ -40,43 +40,15 @@ class CountryEndpoint extends CollectionEndpointAbstract
      *
      * Will throw a ApiException if the country id is invalid or the resource cannot be found.
      *
-     * @param string $countryId
+     * @param string $code
      * @param array $parameters
      *
      * @return Country
      * @throws ApiException
      */
-    public function get($countryId, array $parameters = [])
+    public function get($code, array $parameters = [])
     {
-        return $this->rest_read($countryId, $parameters);
-    }
-
-    /**
-     * Retrieve an Country from the API by it's ISO 3166-1 alpha-2 code.
-     *
-     * Will throw a ApiException if the country code is invalid or the resource cannot be found.
-     *
-     * @param string $countryCode
-     * @param array $parameters
-     *
-     * @return Country|null
-     * @throws ApiException
-     */
-    public function getByCode($countryCode, array $parameters = [])
-    {
-        $parameters = array_merge([
-            'filter' => [
-                'code' => $countryCode
-            ]
-        ], $parameters);
-
-        $result = $this->page(1, 1, $parameters);
-
-        if($result->count > 0) {
-            return $result[0];
-        }
-
-        return null;
+        return $this->rest_read($code, $parameters);
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace Ominity\Api\Resources\Settings;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\Commerce\Currency;
+use Ominity\Api\Resources\ResourceFactory;
 
 class Country extends BaseResource
 {
@@ -35,11 +37,11 @@ class Country extends BaseResource
     public $language;
 
     /**
-     * ID of the default currency for the country.
+     * ISO 4217 currency code of the country.
      *
-     * @var int|null
+     * @var string
      */
-    public $currencyId;
+    public $currency;
 
     /**
      * Is the country active within commerce?
@@ -49,7 +51,7 @@ class Country extends BaseResource
     public $isEnabled;
 
     /** 
-     * UTC datetime the page was last updated in ISO-8601 format.
+     * UTC datetime the country was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -57,7 +59,7 @@ class Country extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the page was created in ISO-8601 format.
+     * UTC datetime the country was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -70,6 +72,27 @@ class Country extends BaseResource
     public $_links;
 
     /**
+     * Retrieve the currency for the country.
+     *
+     * @return Currency
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function currency()
+    {
+        if (isset($this->_embedded, $this->_embedded->currency)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->category,
+                new Currency($this->client)
+            );
+        }
+        
+        return $this->client->commerce->currencies->get($this->currency);
+    }
+
+    /**
+     * Retrieve the language for the country.
+     * 
      * @return Language
      * @throws ApiException
      */
