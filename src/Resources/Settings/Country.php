@@ -82,7 +82,7 @@ class Country extends BaseResource
         if (isset($this->_embedded, $this->_embedded->currency)) 
         {
             return ResourceFactory::createFromApiResult(
-                $this->_embedded->category,
+                $this->_embedded->currency,
                 new Currency($this->client)
             );
         }
