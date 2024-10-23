@@ -138,6 +138,21 @@ class Product extends BaseResource
     public $customFields;
 
     /**
+     * Amount of stock for the product.
+     * Null if stock is not enabled. 
+     *
+     * @var int|null
+     */
+    public $stock;
+
+    /**
+     * Is backordering this product allowed?
+     *
+     * @var bool
+     */
+    public $isBackorderAllowed;
+
+    /**
      * The offers for this product.
      *
      * @var array|object[]
