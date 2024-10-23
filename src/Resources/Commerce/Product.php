@@ -259,10 +259,10 @@ class Product extends BaseResource
     {
         if (isset($this->_embedded, $this->_embedded->product_groups)) 
         {
-            return ResourceFactory::createBaseResourceCollection(
+            return ResourceFactory::createCursorResourceCollection(
                 $this->client, 
-                ProductGroup::class,
-                $this->_embedded->product_groups
+                $this->_embedded->product_groups,
+                ProductGroup::class
             );
         }
         
