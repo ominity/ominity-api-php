@@ -141,10 +141,10 @@ class Category extends BaseResource
     {
         if (isset($this->_embedded, $this->_embedded->children)) 
         {
-            return ResourceFactory::createBaseResourceCollection(
+            return ResourceFactory::createCursorResourceCollection(
                 $this->client, 
+                $this->_embedded->children,
                 Category::class,
-                $this->_embedded->children
             );
         }
 
