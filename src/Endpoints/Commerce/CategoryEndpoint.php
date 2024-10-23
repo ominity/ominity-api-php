@@ -5,8 +5,8 @@ namespace Ominity\Api\Endpoints\Commerce;
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Resources\Commerce\Category;
+use Ominity\Api\Resources\Commerce\CategoryCollection;
 use Ominity\Api\Resources\LazyCollection;
-use Ominity\Api\Resources\Modules\Blog\CategoryCollection;
 
 class CategoryEndpoint extends CollectionEndpointAbstract
 {
