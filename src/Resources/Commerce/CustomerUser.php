@@ -3,6 +3,8 @@
 namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\ResourceFactory;
+use Ominity\Api\Resources\Users\User;
 
 class CustomerUser extends BaseResource
 {
@@ -90,6 +92,14 @@ class CustomerUser extends BaseResource
      * @throws ApiException
      */
     public function user() {
+        if (isset($this->_embedded, $this->_embedded->user)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->user,
+                new User($this->client)
+            );
+        }
+
         return $this->client->users->get($this->userId);
     }
 
@@ -100,6 +110,14 @@ class CustomerUser extends BaseResource
      * @throws ApiException
      */
     public function customer() {
+        if (isset($this->_embedded, $this->_embedded->customer)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->customer,
+                new Customer($this->client)
+            );
+        }
+
         return $this->client->commerce->customers->get($this->customerId);
     }
 }
