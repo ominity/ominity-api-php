@@ -16,7 +16,7 @@ class Invoice extends BaseResource
     public $resource;
 
     /**
-     * Id of the order.
+     * Id of the invoice.
      *
      * @var int
      */
@@ -68,6 +68,13 @@ class Invoice extends BaseResource
      * @var string|null
      */
     public $companyVat;
+
+    /**
+     * The billing address for this invoice.
+     *
+     * @var \stdClass
+     */
+    public $billingAddress;
     
     /**
      * Subtotal amount object containing the value and currency
@@ -97,6 +104,13 @@ class Invoice extends BaseResource
      */
     public $totalAmount;
 
+    /**
+     * Amount paid object containing the value and currency
+     *
+     * @var \stdClass
+     */
+    public $amountPaid;
+
     /** 
      * UTC datetime of the invoice date in ISO-8601 format.
      *
@@ -122,14 +136,28 @@ class Invoice extends BaseResource
     public $paidAt;
 
     /**
-     * The order lines contain the actual things the customer bought.
+     * The invoice lines contain the actual things the customer bought.
      *
      * @var array|object[]
      */
     public $lines;
 
+    /**
+     * Is this invoice tax exempt?
+     *
+     * @var bool
+     */
+    public $isTaxExempt;
+
+    /**
+     * Notes for the invoice.
+     *
+     * @var string
+     */
+    public $notes;
+
     /** 
-     * UTC datetime the customer was last updated in ISO-8601 format.
+     * UTC datetime the invoice was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -137,7 +165,7 @@ class Invoice extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the customer was created in ISO-8601 format.
+     * UTC datetime the invoice was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -148,11 +176,6 @@ class Invoice extends BaseResource
      * @var \stdClass
      */
     public $_links;
-
-    /**
-     * @var \stdClass[]
-     */
-    public $_embedded;
 
     /**
      * Is this payment still open / ongoing?
@@ -225,6 +248,14 @@ class Invoice extends BaseResource
             return null;
         }
 
+        if (isset($this->_embedded, $this->_embedded->customer)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->customer,
+                new Customer($this->client)
+            );
+        }
+
         return $this->client->commerce->customers->get($this->customerId);
     }
 
@@ -249,5 +280,23 @@ class Invoice extends BaseResource
      */
     public function pdf() {
         return $this->client->commerce->invoices->pdf($this->id);
+    }
+
+    /**
+     * Retrieve the payments for this invoice.
+     * Requires the invoice to be retrieved using the embed payments parameter.
+     *
+     * @return null|\Ominity\Api\Resources\Commerce\PaymentCollection
+     */
+    public function payments()
+    {
+        if (isset($this->_embedded, $this->_embedded->payments)) 
+        {
+            return ResourceFactory::createCursorResourceCollection(
+                $this->client,
+                $this->_embedded->payments,
+                Payment::class
+            );
+        }
     }
 }

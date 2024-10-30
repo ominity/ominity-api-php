@@ -3,6 +3,8 @@
 namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\Modules\Bookings\Booking;
+use Ominity\Api\Resources\ResourceFactory;
 use Ominity\Api\Types\OrderLineStatus;
 use Ominity\Api\Types\OrderLineType;
 
@@ -38,11 +40,11 @@ class OrderLine extends BaseResource
     public $type;
 
     /**
-     * The ID of the product sold in this line.
+     * The type and ID of the orderable item.
      *
-     * @var int|null
+     * @var \stdClass
      */
-    public $productId;
+    public $orderable;
 
     /**
      * The type of product offer.
@@ -65,14 +67,6 @@ class OrderLine extends BaseResource
      * @var int
      */
     public $quantity;
-
-    /**
-     * A description of the order line.
-     *
-     * @example USB-C to Lightning Cable - 2 meters
-     * @var string
-     */
-    public $name;
 
     /**
      * The price of a single item in the order line.
@@ -113,13 +107,6 @@ class OrderLine extends BaseResource
     public $vatAmount;
 
     /**
-     * A link pointing to an image of the product sold.
-     *
-     * @var string|null
-     */
-    public $imageUrl;
-
-    /**
      * During creation of the order you can set custom metadata on order lines that is stored with
      * the order, and given back whenever you retrieve that order line.
      *
@@ -134,9 +121,9 @@ class OrderLine extends BaseResource
      * @var int|null
      */
     public $intervalId;
-
+    
     /** 
-     * UTC datetime the customer was last updated in ISO-8601 format.
+     * UTC datetime the order line was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -144,7 +131,7 @@ class OrderLine extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the customer was created in ISO-8601 format.
+     * UTC datetime the order line was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -155,11 +142,6 @@ class OrderLine extends BaseResource
      * @var \stdClass
      */
     public $_links;
-
-    /**
-     * @var \stdClass[]
-     */
-    public $_embedded;
 
     /**
      * Is this order line still pending?
@@ -189,15 +171,6 @@ class OrderLine extends BaseResource
     public function isCompleted()
     {
         return $this->status === OrderLineStatus::COMPLETED;
-    }
-
-    /**
-     * Get the product related to this order line.
-     * 
-     * @return Product
-     */
-    public function getProduct() {
-        $this->client->commerce->products->get($this->productId);
     }
 
     /**
@@ -241,5 +214,46 @@ class OrderLine extends BaseResource
     public function isDiscount()
     {
         return $this->type === OrderLineType::DISCOUNT;
+    }
+
+    /**
+     * Get the orderable item related to this order line.
+     *
+     * @return mixed|null
+     */
+    public function item()
+    {
+        if (! isset($this->_embedded->item)) {
+            return null;
+        }
+
+        // Product
+        if ($this->_embedded->item->resource === "product") 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->item,
+                new Product($this->client)
+            );
+        }
+
+        // Subscription
+        if ($this->_embedded->item->resource === "subscription") 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->item,
+                new Subscription($this->client)
+            );
+        }
+
+        // Module: Bookings
+        if ($this->_embedded->item->resource === "bookings_booking") 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->item,
+                new Booking($this->client)
+            );
+        }
+
+        return $this->_embedded->item;
     }
 }

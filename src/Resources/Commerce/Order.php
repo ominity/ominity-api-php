@@ -68,6 +68,20 @@ class Order extends BaseResource
      * @var string|null
      */
     public $companyVat;
+
+    /**
+     * The billing address for this order.
+     *
+     * @var \stdClass
+     */
+    public $billingAddress;
+
+    /**
+     * The shipping address for this order.
+     *
+     * @var \stdClass
+     */
+    public $shippingAddress;
     
     /**
      * Subtotal amount object containing the value and currency
@@ -75,6 +89,14 @@ class Order extends BaseResource
      * @var \stdClass
      */
     public $subtotalAmount;
+
+    /**
+     * Shipping line amount obects containing shippingAmount, 
+     * discountAmount, vatAmount and totalAmount.
+     *
+     * @var \stdClass
+     */
+    public $shipping;
 
     /**
      * Discount amount object containing the value and currency
@@ -90,27 +112,12 @@ class Order extends BaseResource
      */
     public $totalAmount;
 
-     /**
+    /**
      * VAT amount object containing the value and currency
      *
      * @var \stdClass
      */
     public $vatAmount;
-
-    /**
-     * Amount paid object containing the value and currency
-     *
-     * @var \stdClass
-     */
-    public $amountPaid;
-
-    /** 
-     * UTC datetime the order was completed in ISO-8601 format.
-     *
-     * @example "2013-12-25T10:30:54+00:00"
-     * @var string|null
-     */
-    public $completedAt;
 
     /**
      * The order lines contain the actual things the customer bought.
@@ -119,8 +126,30 @@ class Order extends BaseResource
      */
     public $lines;
 
+    /**
+     * If a shipping method was related to this order, the shipping method ID will
+     * be available here as well.
+     *
+     * @var int|null
+     */
+    public $shippingMethodId;
+
+    /**
+     * Is this order tax exempt?
+     *
+     * @var bool
+     */
+    public $isTaxExempt;
+
+    /**
+     * Notes for the order.
+     *
+     * @var string
+     */
+    public $notes;
+
     /** 
-     * UTC datetime the customer was last updated in ISO-8601 format.
+     * UTC datetime the order was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -128,7 +157,7 @@ class Order extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the customer was created in ISO-8601 format.
+     * UTC datetime the order was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -276,6 +305,14 @@ class Order extends BaseResource
             return null;
         }
 
+        if (isset($this->_embedded, $this->_embedded->customer)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->customer,
+                new Customer($this->client)
+            );
+        }
+
         return $this->client->commerce->customers->get($this->customerId);
     }
 
@@ -290,7 +327,37 @@ class Order extends BaseResource
             return null;
         }
 
+        if (isset($this->_embedded, $this->_embedded->invoice)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->invoice,
+                new Invoice($this->client)
+            );
+        }
+
         return $this->client->commerce->invoices->get($this->invoiceId);
+    }
+
+    /**
+     * Get the shipping method related to this order.
+     *
+     * @return ShippingMethod|null
+     */
+    public function shippingMethod()
+    {
+        if (empty($this->shippingMethodId)) {
+            return null;
+        }
+
+        if (isset($this->_embedded, $this->_embedded->shipping_method)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->shipping_method,
+                new ShippingMethod($this->client)
+            );
+        }
+
+        return $this->client->commerce->shippingMethods->get($this->shippingMethodId);
     }
 
     /**

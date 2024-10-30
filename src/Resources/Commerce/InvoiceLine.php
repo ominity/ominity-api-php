@@ -3,6 +3,8 @@
 namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\Modules\Bookings\Booking;
+use Ominity\Api\Resources\ResourceFactory;
 
 class InvoiceLine extends BaseResource
 {
@@ -28,12 +30,12 @@ class InvoiceLine extends BaseResource
     public $invoiceId;
 
     /**
-     * If a product was related to this invoice line the product ID will
-     * be available here as well.
-     *
-     * @var int|null
+     * If a orderable item was related to this invoice line, the orderable
+     * item's ID and type will be available here as well.
+     * 
+     * @var \stdClass|null
      */
-    public $productId;
+    public $orderable;
 
     /**
      * The number of items in the invoice line.
@@ -43,12 +45,12 @@ class InvoiceLine extends BaseResource
     public $quantity;
 
     /**
-     * A short description of the invoice line.
+     * The title of the invoice line.
      *
      * @example USB-C to Lightning Cable - 2 meters
      * @var string
      */
-    public $name;
+    public $title;
 
     /**
      * Additional description of the invoice line.
@@ -117,15 +119,43 @@ class InvoiceLine extends BaseResource
     public $_links;
 
     /**
-     * Get the product related to this invoice line if any.
-     * 
-     * @return Product
+     * Get the orderable item related to this invoice line.
+     *
+     * @return mixed|null
      */
-    public function getProduct() {
-        if (empty($this->productId)) {
+    public function item()
+    {
+        if (! isset($this->_embedded->item)) {
             return null;
         }
 
-        $this->client->commerce->products->get($this->productId);
+        // Product
+        if ($this->_embedded->item->resource === "product") 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->item,
+                new Product($this->client)
+            );
+        }
+
+        // Subscription
+        if ($this->_embedded->item->resource === "subscription") 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->item,
+                new Subscription($this->client)
+            );
+        }
+
+        // Module: Bookings
+        if ($this->_embedded->item->resource === "bookings_booking") 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->item,
+                new Booking($this->client)
+            );
+        }
+
+        return $this->_embedded->item;
     }
 }

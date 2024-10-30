@@ -5,6 +5,8 @@ namespace Ominity\Api\Resources\Users;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\BaseResource;
+use Ominity\Api\Resources\Commerce\CustomerUser;
+use Ominity\Api\Resources\Commerce\CustomerUserCollection;
 use Ominity\Api\Resources\ResourceFactory;
 
 class User extends BaseResource
@@ -125,6 +127,15 @@ class User extends BaseResource
      */
     public function customers()
     {
+        if (isset($this->_embedded, $this->_embedded->customers)) 
+        {
+            return ResourceFactory::createCursorResourceCollection(
+                $this->client, 
+                $this->_embedded->customers,
+                CustomerUser::class,
+            );
+        }
+
         return $this->client->users->customers->allFor($this);
     }
 

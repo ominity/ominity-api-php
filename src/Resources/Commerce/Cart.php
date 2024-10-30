@@ -159,7 +159,7 @@ class Cart extends BaseResource
             return null;
         }
 
-        return $this->client->settings->countries->getByCode($this->country);
+        return $this->client->settings->countries->get($this->country);
     }
 
     /**
@@ -226,7 +226,7 @@ class Cart extends BaseResource
                     return $value !== null;
                 });
             }, $this->items),
-            "coupons" => $this->coupons,
+            "coupons" => $this->coupons ?? [],
         ];
 
         $result = $this->client->commerce->carts->update($this->id, $body);

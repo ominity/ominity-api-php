@@ -8,7 +8,7 @@ use Ominity\Api\Resources\ResourceFactory;
 class CartItem extends BaseResource
 {
     /**
-     * Always 'cart_item'
+     * Always 'cartitem'
      *
      * @var string
      */
