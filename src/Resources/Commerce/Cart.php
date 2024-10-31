@@ -102,6 +102,13 @@ class Cart extends BaseResource
     public $country;
 
     /**
+     * Currency of the cart in ISO 4217 format.
+     *
+     * @var string
+     */
+    public $currency;
+
+    /**
      * Is shipping required for the cart.
      *
      * @var bool
