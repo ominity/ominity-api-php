@@ -5,6 +5,8 @@ namespace Ominity\Api\Resources\Commerce;
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
 use Ominity\Api\Resources\Settings\Country;
+use Ominity\Api\Types\CartStatus;
+use Ominity\Api\Types\CartType;
 
 class Cart extends BaseResource
 {
@@ -147,6 +149,76 @@ class Cart extends BaseResource
      * @var \stdClass
      */
     public $_links;
+
+    /**
+     * Is this cart pending?
+     *
+     * @return bool
+     */
+    public function isPending()
+    {
+        return $this->status === CartStatus::PENDING;
+    }
+
+    /**
+     * Is this cart abandoned?
+     *
+     * @return bool
+     */
+    public function isAbandoned()
+    {
+        return $this->status === CartStatus::ABANDONED;
+    }
+
+    /**
+     * Is this cart completed?
+     *
+     * @return bool
+     */
+    public function isCompleted()
+    {
+        return $this->status === CartStatus::COMPLETED;
+    }
+
+    /**
+     * Is this cart a guest cart?
+     *
+     * @return bool
+     */
+    public function isGuestCart()
+    {
+        return $this->type === CartType::GUEST;
+    }
+
+    /**
+     * Is this cart a personal cart?
+     *
+     * @return bool
+     */
+    public function isPersonalCart()
+    {
+        return $this->type === CartType::PERSONAL;
+    }
+
+    /**
+     * Is this cart a shared cart?
+     *
+     * @return bool
+     */
+    public function isSharedCart()
+    {
+        return $this->type === CartType::SHARED;
+    }
+
+    /**
+     * Is this cart a wishlist cart?
+     *
+     * @return bool
+     */
+    public function isWishlistCart()
+    {
+        return $this->type === CartType::WISHLIST;
+    }
 
     /**
      * Get country
