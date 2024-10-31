@@ -138,6 +138,14 @@ class Product extends BaseResource
     public $customFields;
 
     /**
+     * Product reviews statistics.
+     * Containting total count, average rating and rating distribution.
+     *
+     * @var \stdClass
+     */
+    public $reviews;
+
+    /**
      * Amount of stock for the product.
      * Null if stock is not enabled. 
      *
