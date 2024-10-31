@@ -292,6 +292,9 @@ class Cart extends BaseResource
     public function update()
     {
         $body = [
+            "customerId" => $this->customerId,
+            "userId" => $this->userId,
+            "visitorId" => $this->visitorId,
             "currency" => $this->currency,
             "country" => $this->country,
             "shippingMethodId" => $this->shippingMethodId,
