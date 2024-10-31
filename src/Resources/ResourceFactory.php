@@ -18,9 +18,7 @@ class ResourceFactory
     public static function createFromApiResult($apiResult, BaseResource $resource)
     {
         foreach ($apiResult as $property => $value) {
-            if (property_exists($resource, $property)) {
-                $resource->$property = $value;
-            }
+            $resource->$property = $value;
         }
 
         return $resource;
