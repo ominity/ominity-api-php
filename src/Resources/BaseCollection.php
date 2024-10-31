@@ -49,4 +49,17 @@ abstract class BaseCollection extends \ArrayObject
     public function last() {
         return $this->offsetGet($this->count - 1);
     }
+
+    /**
+     * Merge another collection of the same type into this collection.
+     * 
+     * @param BaseCollection $otherCollection
+     * @return void
+     */
+    public function merge(BaseCollection $otherCollection) {
+        foreach ($otherCollection as $item) {
+            $this->append($item);
+        }
+        $this->count += $otherCollection->count;
+    }
 }
