@@ -34,6 +34,13 @@ class UserEndpoint extends CollectionEndpointAbstract
      */
     public UserOauthAccountEndpoint $oauthaccounts;
 
+    /**
+     * Send and update password reset requests.
+     * 
+     * @var UserPasswordResetEndpoint
+     */
+    public UserPasswordResetEndpoint $passwordreset;
+
     public function __construct(OminityApiClient $client)
     {
         parent::__construct($client);
@@ -41,6 +48,7 @@ class UserEndpoint extends CollectionEndpointAbstract
         $this->customers = new UserCustomerEndpoint($client);
         $this->logins = new UserLoginEndpoint($client);
         $this->oauthaccounts = new UserOauthAccountEndpoint($client);
+        $this->passwordreset = new UserPasswordResetEndpoint($client);
     }
 
     /**

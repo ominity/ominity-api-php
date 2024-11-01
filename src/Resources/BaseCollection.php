@@ -61,5 +61,7 @@ abstract class BaseCollection extends \ArrayObject
             $this->append($item);
         }
         $this->count += $otherCollection->count;
+
+        return $this;
     }
 }
