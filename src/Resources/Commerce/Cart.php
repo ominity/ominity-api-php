@@ -109,6 +109,13 @@ class Cart extends BaseResource
     public $currency;
 
     /**
+     * Total quantity of the cart.
+     *
+     * @var int
+     */
+    public $totalQuantity;
+
+    /**
      * Is shipping required for the cart.
      *
      * @var bool
