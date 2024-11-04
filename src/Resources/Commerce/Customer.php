@@ -149,7 +149,7 @@ class Customer extends BaseResource
      * @return Address|null
      */
     public function shippingAddress() {
-        if (! isset($this->billingAddress)) {
+        if (! isset($this->shippingAddress)) {
             return null;
         }
 
