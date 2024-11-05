@@ -114,6 +114,16 @@ class Address extends BaseResource
     public $_links;
 
     /**
+     * Is the address valid?
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        return !empty($this->firstName) && !empty($this->lastName) && !empty($this->street) && !empty($this->number) && !empty($this->postalCode) && !empty($this->city) && !empty($this->country);
+    }
+
+    /**
      * Get country
      * 
      * @return Country|null
@@ -124,7 +134,7 @@ class Address extends BaseResource
             return null;
         }
 
-        return $this->client->settings->countries->getByCode($this->country);
+        return $this->client->settings->countries->get($this->country);
     }
 
     /**
@@ -150,5 +160,16 @@ class Address extends BaseResource
         $result = $this->client->commerce->customers->addresses->updateForId($this->customerId, $this->id, $body);
 
         return ResourceFactory::createFromApiResult($result, new Address($this->client));
+    }
+
+    /**
+     * Deletes the address.
+     *
+     * @return mixed
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function delete()
+    {
+        $this->client->commerce->customers->addresses->deleteForId($this->customerId, $this->id);
     }
 }

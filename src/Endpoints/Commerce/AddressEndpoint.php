@@ -97,6 +97,44 @@ class AddressEndpoint extends CollectionEndpointAbstract
     }
 
     /**
+     * Deletes the given address for a specific Customer.
+     *
+     * Will throw a ApiException if the address id is invalid or the resource cannot be found.
+     * Returns with HTTP status No Content (204) if successful.
+     *
+     * @param Customer $customer
+     * @param int $addressId
+     *
+     * @param array $data
+     * @return Address
+     * @throws ApiException
+     */
+    public function deleteFor(Customer $customer, int $addressId, array $data = [])
+    {
+        return $this->deleteForId($customer->id, $addressId, $data);
+    }
+
+    /**
+     * Deletes the given address for a specific Customer ID.
+     *
+     * Will throw a ApiException if the address id is invalid or the resource cannot be found.
+     * Returns with HTTP status No Content (204) if successful.
+     *
+     * @param int $customerId
+     * @param int $addressId
+     *
+     * @param array $data
+     * @return Address
+     * @throws ApiException
+     */
+    public function deleteForId(int $customerId, int $addressId, array $data = [])
+    {
+        $this->setPathVariables(['customerId' => $customerId]);
+
+        return $this->rest_delete($addressId, $data);
+    }
+
+    /**
      * Get the address for a specific Customer.
      *
      * @param Customer $product
