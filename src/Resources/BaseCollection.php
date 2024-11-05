@@ -80,6 +80,20 @@ abstract class BaseCollection extends \ArrayObject
     }
 
     /**
+     * Apply a callback to each item in the collection and return a new collection with keys.
+     * 
+     * @param callable $callback
+     * @return static
+     */
+    public function mapWithKey(callable $callback) {
+        $result = new static($this->count, $this->_links);
+        foreach ($this as $key => $item) {
+            $result->offsetSet($key, $callback($key, $item));
+        }
+        return $result;
+    }
+
+    /**
      * Filter the collection using a callback.
      * 
      * @param callable $callback
