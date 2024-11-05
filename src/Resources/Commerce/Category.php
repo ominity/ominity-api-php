@@ -81,7 +81,7 @@ class Category extends BaseResource
     public $routes;
 
     /**
-     * Custom field values of the product.
+     * Custom field values of the category.
      *
      * @var \stdClass
      */

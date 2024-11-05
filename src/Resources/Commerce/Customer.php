@@ -79,6 +79,13 @@ class Customer extends BaseResource
      */
     public $isTaxExempt;
 
+    /**
+     * Custom field values of the customer.
+     *
+     * @var \stdClass
+     */
+    public $customFields;
+
     /** 
      * UTC datetime the customer was last updated in ISO-8601 format.
      *

@@ -60,6 +60,13 @@ class User extends BaseResource
      */
     public $language;
 
+    /**
+     * Custom field values of the user.
+     *
+     * @var \stdClass
+     */
+    public $customFields;
+
     /** 
      * UTC datetime the page was last updated in ISO-8601 format.
      *
