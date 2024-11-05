@@ -64,4 +64,44 @@ abstract class BaseCollection extends \ArrayObject
 
         return $this;
     }
+
+    /**
+     * Apply a callback to each item in the collection.
+     * 
+     * @param callable $callback
+     * @return static
+     */
+    public function map(callable $callback) {
+        $result = new static($this->count, $this->_links);
+        foreach ($this as $key => $item) {
+            $result->offsetSet($key, $callback($item));
+        }
+        return $result;
+    }
+
+    /**
+     * Filter the collection using a callback.
+     * 
+     * @param callable $callback
+     * @return static
+     */
+    public function filter(callable $callback) {
+        $result = new static(0, $this->_links);
+        foreach ($this as $item) {
+            if ($callback($item)) {
+                $result->append($item);
+                $result->count++;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get the collection as an array.
+     * 
+     * @return array
+     */
+    public function toArray() {
+        return $this->getArrayCopy();
+    }
 }
