@@ -233,15 +233,10 @@ class Post extends BaseResource
      */
     public function tags()
     {
-        if (isset($this->_embedded, $this->_embedded->tags)) 
-        {
-            return ResourceFactory::createCursorResourceCollection(
-                $this->client,
-                $this->_embedded->tags,
-                Tag::class
-            );
-        }
-
-        return null;
+        return ResourceFactory::createCursorResourceCollection(
+            $this->client,
+            $this->tags ?? [],
+            Tag::class
+        );
     }
 }
