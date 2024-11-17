@@ -1,108 +1,102 @@
 <?php
 
-namespace Ominity\Api\Resources\Modules\Blog;
+namespace Ominity\Api\Resources\Modules\Knowledgebase;
 
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\Cms\Route;
 use Ominity\Api\Resources\Cms\RouteCollection;
 use Ominity\Api\Resources\ResourceFactory;
-use Ominity\Api\Types\Modules\Blog\PostStatus;
+use Ominity\Api\Types\Modules\Knowledgebase\ArticleStatus;
+use Ominity\Api\Types\Modules\Knowledgebase\ArticleVisibility;
 
-class Post extends BaseResource
+class Article extends BaseResource
 {
     /**
-     * Always 'blog_post'
+     * Always 'knowledgebase_article'
      *
      * @var string
      */
     public $resource;
 
     /**
-     * Id of the blog post.
+     * Id of the knowledge base article.
      *
      * @var int
      */
     public $id;
 
     /**
-     * Title of the blog post.
+     * Title of the knowledge base article.
      *
      * @var string
      */
     public $title;
 
     /**
-     * Status of the blog post.
+     * Status of the knowledge base article.
      *
      * @var string
      */
     public $status;
 
     /**
-     * Content of the blog post.
+     * Visbility of the knowledge base article.
+     *
+     * @var string
+     */
+    public $visbility;
+
+    /**
+     * Content of the knowledge base article.
      *
      * @var string
      */
     public $content;
 
     /**
-     * Image of the blog post.
-     *
-     * @var string|null
-     */
-    public $image;
-
-    /**
-     * Slug of the blog post.
+     * Slug of the knowledge base article.
      *
      * @var string
      */
     public $slug;
 
     /**
-     * Teaser short description of the blog post.
+     * Category ID of the knowledge base article.
      *
-     * @var string
-     */
-    public $teaser;
-
-    /**
-     * Teaser image of the blog post.
-     *
-     * @var string|null
-     */
-    public $teaserImage;
-
-    /**
-     * Category ID of the blog post.
-     *
-     * @var int
+     * @var int|null
      */
     public $categoryId;
     
     /**
-     * Publisher ID of the blog post.
+     * Author ID of the knowledge base article.
      *
      * @var int|null
      */
-    public $publisherId;
+    public $authorId;
 
     /**
-     * Time to read the blog post in minutes.
+     * Time to read the knowledge base article in minutes.
      *
      * @var int
      */
     public $timeToRead;
 
     /**
-     * Meta tags of the blog post.
+     * Order of the knowledge base article.
+     *
+     * @var int
+     */
+    public $order;
+
+    /**
+     * Meta tags of the knowledge base article.
      * 
      * @var \stdClass
      */
     public $meta;
 
     /**
-     * Get list of all routes for this page. 
+     * Get list of all routes for this knowledge base article.
      * It has a locale as key and the route as value.
      *
      * @var \stdClass
@@ -110,14 +104,28 @@ class Post extends BaseResource
     public $routes;
 
     /**
-     * List of tags related to the post.
+     * List of searchables for this knowledge base article.
+     *
+     * @var array|string[]
+     */
+    public $searches;
+
+    /**
+     * List of tags related to the knowledge base article.
      *
      * @var array|\stdClass[]
      */
     public $tags;
 
+    /**
+     * Custom field values of the knowledge base article.
+     *
+     * @var \stdClass
+     */
+    public $customFields;
+    
     /** 
-     * UTC datetime the blog post was published in ISO-8601 format.
+     * UTC datetime the knowledge base article was published in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string|null
@@ -125,7 +133,7 @@ class Post extends BaseResource
     public $publishedAt;
 
     /** 
-     * UTC datetime the blog post was last updated in ISO-8601 format.
+     * UTC datetime the knowledge base article was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -133,7 +141,7 @@ class Post extends BaseResource
     public $updatedAt;
 
     /** 
-     * UTC datetime the blog post was created in ISO-8601 format.
+     * UTC datetime the knowledge base article was created in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
      * @var string
@@ -146,39 +154,66 @@ class Post extends BaseResource
     public $_links;
 
     /**
-     * Is this post a draft?
+     * Is this article a draft?
      * 
      * @return bool
      */
     public function isDraft() {
-        return $this->status === PostStatus::DRAFT;
+        return $this->status === ArticleStatus::DRAFT;
     }
 
     /**
-     * Is this post scheduled?
+     * Is this article scheduled?
      * 
      * @return bool
      */
     public function isScheduled() {
-        return $this->status === PostStatus::SCHEDULED;
+        return $this->status === ArticleStatus::SCHEDULED;
     }
 
     /**
-     * Is this post published?
+     * Is this article published?
      * 
      * @return bool
      */
     public function isPublished() {
-        return $this->status === PostStatus::PUBLISHED;
+        return $this->status === ArticleStatus::PUBLISHED;
     }
 
     /**
-     * Is this post archived?
+     * Is this article archived?
      * 
      * @return bool
      */
     public function isArchived() {
-        return $this->status === PostStatus::ARCHIVED;
+        return $this->status === ArticleStatus::ARCHIVED;
+    }
+
+    /**
+     * Is this article's visibility private?
+     * 
+     * @return bool
+     */
+    public function isPrivate() {
+        return $this->visbility === ArticleVisibility::PRIVATE;
+    }
+
+    /**
+     * Is this article's visibility users?
+     * 
+     * @return bool
+     */
+    public function isUsers() {
+        return $this->visbility === ArticleVisibility::USERS;
+    }
+
+    /**
+     * Is this article's visibility public?
+     * 
+     * @return bool
+     */
+    public function isPublic() {
+        return $this->visbility === ArticleVisibility::PUBLIC;
     }
 
     /**
@@ -195,7 +230,7 @@ class Post extends BaseResource
     }
 
     /**
-     * Get the routes for this post.
+     * Get the routes for this article.
      *
      * @return RouteCollection
      */

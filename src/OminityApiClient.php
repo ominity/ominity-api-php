@@ -18,7 +18,7 @@ class OminityApiClient
     /**
      * Version of our client.
      */
-    public const CLIENT_VERSION = "1.1.24";
+    public const CLIENT_VERSION = "1.1.25";
 
     /**
      * Endpoint of the remote API.
