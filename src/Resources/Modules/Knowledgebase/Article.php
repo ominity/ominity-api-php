@@ -274,4 +274,23 @@ class Article extends BaseResource
             Tag::class
         );
     }
+
+    /**
+     * Get the category related to this blog post.
+     *
+     * @return ArticleFeedbackCollection
+     */
+    public function feedbacks()
+    {
+        if (isset($this->_embedded, $this->_embedded->feedbacks)) 
+        {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                ArticleFeedback::class,
+                $this->_embedded->feedbacks
+            );
+        }
+
+        return $this->client->modules->knowledgebase->articles->feedbacks->listFor($this);
+    }
 }

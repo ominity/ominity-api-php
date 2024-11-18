@@ -4,6 +4,7 @@ namespace Ominity\Api\Endpoints\Modules\Knowledgebase;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
+use Ominity\Api\OminityApiClient;
 use Ominity\Api\Resources\LazyCollection;
 use Ominity\Api\Resources\Modules\Knowledgebase\Article;
 use Ominity\Api\Resources\Modules\Knowledgebase\ArticleCollection;
@@ -11,6 +12,20 @@ use Ominity\Api\Resources\Modules\Knowledgebase\ArticleCollection;
 class ArticleEndpoint extends CollectionEndpointAbstract
 {
     protected $resourcePath = "modules/knowledgebase/articles";
+
+    /**
+     * RESTful ArticleFeedback resource.
+     *
+     * @var ArticleFeedbackEndpoint
+     */
+    public ArticleFeedbackEndpoint $feedbacks;
+
+    public function __construct(OminityApiClient $client)
+    {
+        parent::__construct($client);
+
+        $this->feedbacks = new ArticleFeedbackEndpoint($client);
+    }
 
     /**
      * Get the object that is used by this API. Every API uses one type of object.
