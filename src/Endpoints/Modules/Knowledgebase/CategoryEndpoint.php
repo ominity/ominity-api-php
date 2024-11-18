@@ -4,8 +4,8 @@ namespace Ominity\Api\Endpoints\Modules\Knowledgebase;
 
 use Ominity\Api\Endpoints\CollectionEndpointAbstract;
 use Ominity\Api\Exceptions\ApiException;
-use Ominity\Api\Resources\Commerce\Category;
 use Ominity\Api\Resources\LazyCollection;
+use Ominity\Api\Resources\Modules\Knowledgebase\Category;
 use Ominity\Api\Resources\Modules\Knowledgebase\CategoryCollection;
 
 class CategoryEndpoint extends CollectionEndpointAbstract
