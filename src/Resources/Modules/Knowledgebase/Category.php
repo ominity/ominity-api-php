@@ -176,7 +176,7 @@ class Category extends BaseResource
             );
         }
 
-        // return $this->client->commerce->categories->get($this->parentId);
+        return $this->client->modules->knowledgebase->categories->get($this->parentId);
     }
 
     /**
@@ -191,7 +191,7 @@ class Category extends BaseResource
             return ResourceFactory::createCursorResourceCollection(
                 $this->client,
                 $this->_embedded->children,
-                new Category($this->client)
+                Category::class
             );
         }
 
@@ -214,7 +214,7 @@ class Category extends BaseResource
             return ResourceFactory::createCursorResourceCollection(
                 $this->client,
                 $this->_embedded->ancestors,
-                new Category($this->client)
+                Category::class
             );
         }
 
@@ -227,7 +227,7 @@ class Category extends BaseResource
         return ResourceFactory::createCursorResourceCollection(
             $this->client,
             $ancestors,
-            new Category($this->client)
+            Category::class
         );
     }
 }
