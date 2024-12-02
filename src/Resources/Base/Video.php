@@ -114,4 +114,54 @@ class Video extends BaseResource
     public function isUrl() {
         return $this->type === VideoType::URL;
     }
+
+    /**
+     * Get YouTube video id.
+     * 
+     * @return string|null
+     */
+    public function getYouTubeId() {
+        if ($this->isYouTube()) {
+            $url = parse_url($this->url);
+            if (isset($url['query'])) {
+                parse_str($url['query'], $query);
+                if (isset($query['v'])) {
+                    return $query['v'];
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get Vimeo video id.
+     * 
+     * @return string|null
+     */
+    public function getVimeoId() {
+        if ($this->isVimeo()) {
+            $url = parse_url($this->url);
+            if (isset($url['path'])) {
+                $path = explode('/', $url['path']);
+                return end($path);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get TikTok video id.
+     * 
+     * @return string|null
+     */
+    public function getTikTokId() {
+        if ($this->isTikTok()) {
+            $url = parse_url($this->url);
+            if (isset($url['path'])) {
+                $path = explode('/', $url['path']);
+                return end($path);
+            }
+        }
+        return null;
+    }
 }
