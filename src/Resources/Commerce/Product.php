@@ -3,6 +3,7 @@
 namespace Ominity\Api\Resources\Commerce;
 
 use Ominity\Api\Resources\Base\Video;
+use Ominity\Api\Resources\Base\VideoCollection;
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\Cms\Route;
 use Ominity\Api\Resources\Cms\RouteCollection;

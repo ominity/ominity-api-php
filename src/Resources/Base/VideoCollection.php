@@ -5,7 +5,7 @@ namespace Ominity\Api\Resources\Base;
 use Ominity\Api\Resources\Base\Video;
 use Ominity\Api\Resources\BaseCollection;
 
-class ComponentCollection extends BaseCollection
+class VideoCollection extends BaseCollection
 {
     /**
      * @return string
