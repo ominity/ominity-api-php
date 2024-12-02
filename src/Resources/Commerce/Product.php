@@ -2,6 +2,7 @@
 
 namespace Ominity\Api\Resources\Commerce;
 
+use Ominity\Api\Resources\Base\Video;
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\Cms\Route;
 use Ominity\Api\Resources\Cms\RouteCollection;
@@ -167,6 +168,13 @@ class Product extends BaseResource
      */
     public $offers;
 
+    /**
+     * The videos for this product.
+     *
+     * @var array|object[]
+     */
+    public $videos;
+
     /** 
      * UTC datetime the product was published in ISO-8601 format.
      *
@@ -259,7 +267,7 @@ class Product extends BaseResource
         return !is_null($this->stock);
     }
 
-     /**
+    /**
      * Get the offer value objects
      *
      * @return ProductOfferCollection
@@ -344,6 +352,19 @@ class Product extends BaseResource
             $this->client,
             Route::class,
             array_values((array) $this->routes)
+        );
+    }
+
+    /**
+     * Get the video value objects
+     *
+     * @return VideoCollection
+     */
+    public function videos() {
+        return ResourceFactory::createBaseResourceCollection(
+            $this->client,
+            Video::class,
+            $this->videos
         );
     }
 }
