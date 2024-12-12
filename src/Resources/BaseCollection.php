@@ -111,6 +111,21 @@ abstract class BaseCollection extends \ArrayObject
     }
 
     /**
+     * Find an item in the collection by its identifier.
+     * 
+     * @param mixed $identifier
+     * @return mixed|null
+     */
+    public function find($identifier) {
+        foreach ($this as $item) {
+            if ($item->id == $identifier) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get the collection as an array.
      * 
      * @return array

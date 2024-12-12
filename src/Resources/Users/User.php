@@ -156,4 +156,15 @@ class User extends BaseResource
     {
         return $this->client->users->oauthaccounts->allFor($this);
     }
+
+    /**
+     * Get all recovery codes for this user
+     *
+     * @return UserRecoveryCodeCollection
+     * @throws \Ominity\Api\Exceptions\ApiException
+     */
+    public function recoverycodes()
+    {
+        return $this->client->users->recoverycodes->listFor($this);
+    }
 }

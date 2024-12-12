@@ -41,6 +41,13 @@ class UserEndpoint extends CollectionEndpointAbstract
      */
     public UserPasswordResetEndpoint $passwordreset;
 
+    /**
+     * Generate and validate recovery codes.
+     * 
+     * @var UserRecoveryCodeEndpoint
+     */
+    public UserRecoveryCodeEndpoint $recoverycodes;
+
     public function __construct(OminityApiClient $client)
     {
         parent::__construct($client);
@@ -49,6 +56,7 @@ class UserEndpoint extends CollectionEndpointAbstract
         $this->logins = new UserLoginEndpoint($client);
         $this->oauthaccounts = new UserOauthAccountEndpoint($client);
         $this->passwordreset = new UserPasswordResetEndpoint($client);
+        $this->recoverycodes = new UserRecoveryCodeEndpoint($client);
     }
 
     /**
