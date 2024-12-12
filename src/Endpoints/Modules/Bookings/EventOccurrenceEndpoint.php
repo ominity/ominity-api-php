@@ -99,7 +99,7 @@ class EventOccurrenceEndpoint extends CollectionEndpointAbstract
      *
      * @throws \Ominity\Api\Exceptions\ApiException
      */
-    public function listForId(int $eventId, array $parameters = [])
+    public function listForId(string $eventId, array $parameters = [])
     {
         $this->setPathVariables(['eventId' => $eventId]);
 
