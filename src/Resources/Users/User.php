@@ -61,6 +61,13 @@ class User extends BaseResource
     public $language;
 
     /**
+     * Is multi-factor authentication enabled for the user.
+     *
+     * @var bool
+     */
+    public $isMfaEnabled;
+
+    /**
      * Custom field values of the user.
      *
      * @var \stdClass
