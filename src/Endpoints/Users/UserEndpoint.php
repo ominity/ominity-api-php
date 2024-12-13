@@ -28,6 +28,13 @@ class UserEndpoint extends CollectionEndpointAbstract
     public UserLoginEndpoint $logins;
 
     /**
+     * RESTful UserMfaMethod resource.
+     * 
+     * @var UserMfaMethodEndpoint
+     */
+    public UserMfaMethodEndpoint $mfa;
+
+    /**
      * RESTful SocialProviderUser resource.
      * 
      * @var UserOauthAccountEndpoint
@@ -54,6 +61,7 @@ class UserEndpoint extends CollectionEndpointAbstract
         
         $this->customers = new UserCustomerEndpoint($client);
         $this->logins = new UserLoginEndpoint($client);
+        $this->mfa = new UserMfaMethodEndpoint($client);
         $this->oauthaccounts = new UserOauthAccountEndpoint($client);
         $this->passwordreset = new UserPasswordResetEndpoint($client);
         $this->recoverycodes = new UserRecoveryCodeEndpoint($client);
