@@ -4,6 +4,7 @@ namespace Ominity\Api\Resources\Cms;
 
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
+use Ominity\Api\Types\PageComponentStatus;
 
 class PageComponent extends BaseResource
 {
@@ -20,6 +21,20 @@ class PageComponent extends BaseResource
      * @var int
      */
     public $id;
+
+    /**
+     * Internal label of the page component.
+     *
+     * @var string
+     */
+    public $label;
+
+    /**
+     * Status of the page component.
+     *
+     * @var string
+     */
+    public $status;
 
     /**
      * The ID of the page for this page component.
@@ -43,6 +58,14 @@ class PageComponent extends BaseResource
     public $fields;
 
     /** 
+     * UTC datetime the page component was published in ISO-8601 format.
+     *
+     * @example "2013-12-25T10:30:54+00:00"
+     * @var string|null
+     */
+    public $publishedAt;
+
+    /** 
      * UTC datetime the page component was last updated in ISO-8601 format.
      *
      * @example "2013-12-25T10:30:54+00:00"
@@ -62,6 +85,36 @@ class PageComponent extends BaseResource
      * @var \stdClass
      */
     public $_links;
+
+    /**
+     * Is this page component a draft?
+     *
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === PageComponentStatus::DRAFT;
+    }
+
+    /**
+     * Is this page component scheduled?
+     *
+     * @return bool
+     */
+    public function isScheduled()
+    {
+        return $this->status === PageComponentStatus::SCHEDULED;
+    }
+
+    /**
+     * Is this page component published?
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->status === PageComponentStatus::PUBLISHED;
+    }
 
     /**
      * @return Page

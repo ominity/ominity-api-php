@@ -4,6 +4,7 @@ namespace Ominity\Api\Resources\Cms;
 
 use Ominity\Api\Resources\BaseResource;
 use Ominity\Api\Resources\ResourceFactory;
+use Ominity\Api\Types\PageStatus;
 
 class Page extends BaseResource
 {
@@ -34,6 +35,13 @@ class Page extends BaseResource
      * @var string
      */
     public $slug;
+
+    /**
+     * Status of the page.
+     *
+     * @var string
+     */
+    public $status;
 
     /**
      * Page meta data for SEO puposes.
@@ -99,20 +107,33 @@ class Page extends BaseResource
     public $_links;
 
     /**
+     * Is this page a draft?
+     *
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === PageStatus::DRAFT;
+    }
+
+    /**
+     * Is this page scheduled?
+     *
+     * @return bool
+     */
+    public function isScheduled()
+    {
+        return $this->status === PageStatus::SCHEDULED;
+    }
+
+    /**
      * Is this page published?
      *
      * @return bool
      */
     public function isPublished()
     {
-        if (is_null($this->publishedAt)) {
-            return false;
-        }
-
-        $publishedTimestamp = strtotime($this->publishedAt);
-        $currentTimestamp = time();
-
-        return $publishedTimestamp <= $currentTimestamp;
+        return $this->status === PageStatus::PUBLISHED;
     }
 
     /**
@@ -121,6 +142,14 @@ class Page extends BaseResource
      */
     public function layout() 
     {
+        if (isset($this->_embedded, $this->_embedded->layout)) 
+        {
+            return ResourceFactory::createFromApiResult(
+                $this->_embedded->layout,
+                new Layout($this->client)
+            );
+        }
+
         return $this->client->cms->layouts->get($this->layoutId);
     }
 
