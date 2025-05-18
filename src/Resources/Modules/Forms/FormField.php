@@ -35,6 +35,13 @@ class FormField extends BaseResource
     public $type;
 
     /**
+     * Name of the field.
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
      * Label of the field.
      *
      * @var string
