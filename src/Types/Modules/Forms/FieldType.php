@@ -20,6 +20,8 @@ class FieldType
 
     public const CHECKBOX = 'checkbox';
 
+    public const MULTICHECKBOX = 'multicheckbox';
+
     public const RADIO = 'radio';
 
     public const COLOR = 'color';
@@ -39,4 +41,6 @@ class FieldType
     public const METADATA = 'metadata';
 
     public const HONEYPOT = 'honeypot';
+
+    public const HIDDEN = 'hidden';
 }
