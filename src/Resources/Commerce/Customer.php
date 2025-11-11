@@ -26,7 +26,7 @@ class Customer extends BaseResource
     /**
      * Owner user ID of the customer.
      *
-     * @var int
+     * @var int|null
      */
     public $ownerId;
 
@@ -38,11 +38,14 @@ class Customer extends BaseResource
     public $type;
 
     /**
-     * Company name of the customer.
+     * Name of the customer.
+     * For private customers, this is the full name.
+     * For private registered customers, this is the same as the owner's name.
+     * For business customers, this is the company name.
      *
      * @var string|null
      */
-    public $companyName;
+    public $name;
 
     /**
      * Vat number of the customer.
@@ -50,6 +53,13 @@ class Customer extends BaseResource
      * @var string|null
      */
     public $companyVat;
+
+    /**
+     * Email address of the customer.
+     *
+     * @var string
+     */
+    public $email;
 
     /**
      * Phone number of the customer.
@@ -78,6 +88,13 @@ class Customer extends BaseResource
      * @var bool
      */
     public $isTaxExempt;
+
+    /**
+     * Is this customer a guest customer?
+     *
+     * @var bool
+     */
+    public $isGuest;
 
     /**
      * Custom field values of the customer.
@@ -233,6 +250,25 @@ class Customer extends BaseResource
     }
 
     /**
+     * Get all payments for the customer
+     * 
+     * @param  array $parameters
+     * @return PaymentCollection
+     * @throws ApiException
+     */
+    public function payments($parameters = []) {
+        if ( isset($this->_embedded->payments)) {
+            return ResourceFactory::createBaseResourceCollection(
+                $this->client,
+                Payment::class,
+                $this->_embedded->payments
+            );
+        }
+
+        return $this->client->commerce->customers->payments->allFor($this, $parameters);
+    }
+
+    /**
      * Get all invoices for the customer
      * 
      * @param  array $parameters
@@ -252,12 +288,16 @@ class Customer extends BaseResource
     }
 
     /**
-     * Get shipping address
+     * Get owner user
      * 
-     * @return User
+     * @return User|null
      * @throws ApiException
      */
     public function owner() {
+        if (! isset($this->ownerId)) {
+            return null;
+        }
+
         if(isset($this->_embedded->users)) {
             foreach($this->_embedded->users as $user) {
                 if($user->id == $this->ownerId) {
@@ -297,8 +337,9 @@ class Customer extends BaseResource
     {
         $body = [
             "type" => $this->type,
-            "companyName" => $this->companyName,
+            "name" => $this->name,
             "companyVat" => $this->companyVat,
+            "email" => $this->email,
             "phone" => $this->phone,
             "ownerId" => $this->ownerId,
         ];
