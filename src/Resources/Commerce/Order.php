@@ -39,6 +39,14 @@ class Order extends BaseResource
     public $invoiceId;
 
     /**
+     * If a card was used for this order, the card ID will
+     * be available here as well.
+     *
+     * @var string|null
+     */
+    public $cardId;
+
+    /**
      * If a status of this order is not DRAFT the order number will
      * be available here as well.
      *
@@ -140,6 +148,13 @@ class Order extends BaseResource
      * @var bool
      */
     public $isTaxExempt;
+
+    /**
+     * The promotion codes.
+     *
+     * @var array|string[]
+     */
+    public $promotionCodes;
 
     /**
      * Notes for the order.

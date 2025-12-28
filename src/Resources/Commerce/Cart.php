@@ -95,6 +95,20 @@ class Cart extends BaseResource
     public $totalAmount;
 
     /**
+     * The billing address for this cart.
+     *
+     * @var \stdClass
+     */
+    public $billingAddress;
+
+    /**
+     * The shipping address for this cart.
+     *
+     * @var \stdClass
+     */
+    public $shippingAddress;
+
+    /**
      * Country of the address in ISO 3166-1 alpha-2 format.
      *
      * @var string
@@ -137,11 +151,11 @@ class Cart extends BaseResource
     public $items;
 
     /**
-     * The cart coupons.
+     * The promotion codes.
      *
      * @var array|string[]
      */
-    public $coupons;
+    public $promotionCodes;
 
     /** 
      * UTC datetime the cart was last updated in ISO-8601 format.
@@ -315,7 +329,9 @@ class Cart extends BaseResource
                     return $value !== null;
                 });
             }, $this->items),
-            "coupons" => $this->coupons ?? [],
+            "billingAddress" => $this->billingAddress ?? null,
+            "shippingAddress" => $this->shippingAddress ?? null,
+            "promotionCodes" => $this->promotionCodes ?? [],
         ];
 
         $result = $this->client->commerce->carts->update($this->id, $body);
