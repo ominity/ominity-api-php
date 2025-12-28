@@ -329,8 +329,8 @@ class Cart extends BaseResource
                     return $value !== null;
                 });
             }, $this->items),
-            "billingAddress" => $this->billingAddress ?? null,
-            "shippingAddress" => $this->shippingAddress ?? null,
+            "billingAddress" => $this->billingAddress ?? [],
+            "shippingAddress" => $this->shippingAddress ?? [],
             "promotionCodes" => $this->promotionCodes ?? [],
         ];
 
