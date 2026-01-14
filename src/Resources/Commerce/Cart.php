@@ -319,16 +319,18 @@ class Cart extends BaseResource
             "currency" => $this->currency,
             "country" => $this->country,
             "shippingMethodId" => $this->shippingMethodId,
-            "items" => array_map(function($item) {
+            "items" => array_values(array_filter(array_map(function ($item) {
+                if (!is_object($item) || empty($item->productId)) {
+                    return null;
+                }
+
                 return array_filter([
                     "id" => $item->id ?? null,
                     "productId" => $item->productId,
                     "productOfferId" => $item->productOfferId ?? null,
                     "quantity" => $item->quantity ?? 1,
-                ], function($value) {
-                    return $value !== null;
-                });
-            }, $this->items),
+                ], static fn ($value) => $value !== null);
+            }, is_array($this->items) ? $this->items : []))),
             "billingAddress" => $this->billingAddress ?? [],
             "shippingAddress" => $this->shippingAddress ?? [],
             "promotionCodes" => $this->promotionCodes ?? [],
