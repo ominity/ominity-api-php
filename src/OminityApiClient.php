@@ -6,6 +6,7 @@ use Ominity\Api\Endpoints\Cms\CmsEndpointCollection;
 use Ominity\Api\Endpoints\Commerce\CommerceEndpointCollection;
 use Ominity\Api\Endpoints\Modules\ModulesEndpointCollection;
 use Ominity\Api\Endpoints\Settings\SettingsEndpointCollection;
+use Ominity\Api\Endpoints\Tracking\TrackingEndpointCollection;
 use Ominity\Api\Endpoints\Users\UserEndpoint;
 use Ominity\Api\Exceptions\ApiException;
 use Ominity\Api\Exceptions\HttpAdapterDoesNotSupportDebuggingException;
@@ -18,7 +19,7 @@ class OminityApiClient
     /**
      * Version of our client.
      */
-    public const CLIENT_VERSION = "1.3.2";
+    public const CLIENT_VERSION = "1.4.0";
 
     /**
      * Endpoint of the remote API.
@@ -77,6 +78,13 @@ class OminityApiClient
     public $users;
 
     /**
+     * RESTful Tracking endpoints.
+     *
+     * @var TrackingEndpointCollection
+     */
+    public $tracking;
+
+    /**
      * RESTful Modules endppoints.
      *
      * @var ModulesEndpointCollection
@@ -119,6 +127,13 @@ class OminityApiClient
     protected $language = null; // Language code for Accept-Language header
 
     /**
+     * Additional request headers applied to the next request only.
+     *
+     * @var array<string, string>
+     */
+    protected $requestHeaders = [];
+
+    /**
      * @param \GuzzleHttp\ClientInterface|\Ominity\Api\HttpAdapter\HttpAdapterInterface|null $httpClient
      * @param \Ominity\Api\HttpAdapter\HttpAdapterPickerInterface|null $httpAdapterPicker,
      * @param \Ominity\Api\Idempotency\IdempotencyKeyGeneratorContract $idempotencyKeyGenerator,
@@ -144,6 +159,7 @@ class OminityApiClient
         $this->settings = new SettingsEndpointCollection($this);
         $this->users = new UserEndpoint($this);
         $this->modules = new ModulesEndpointCollection($this);
+        $this->tracking = new TrackingEndpointCollection($this);
     }
 
     protected function initializeVersionStrings()
@@ -379,6 +395,59 @@ class OminityApiClient
     }
 
     /**
+     * Set additional headers for the next request.
+     * Headers reset automatically after the request is sent.
+     *
+     * @param array<string, string|null> $headers
+     * @return OminityApiClient
+     */
+    public function setRequestHeaders(array $headers)
+    {
+        $this->requestHeaders = $this->normalizeRequestHeaders($headers);
+
+        return $this;
+    }
+
+    /**
+     * Merge additional headers into the next request.
+     * Headers reset automatically after the request is sent.
+     *
+     * @param array<string, string|null> $headers
+     * @return OminityApiClient
+     */
+    public function addRequestHeaders(array $headers)
+    {
+        $this->requestHeaders = array_merge(
+            $this->requestHeaders,
+            $this->normalizeRequestHeaders($headers)
+        );
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the additional headers scheduled for the next request.
+     *
+     * @return array<string, string>
+     */
+    public function getRequestHeaders()
+    {
+        return $this->requestHeaders;
+    }
+
+    /**
+     * Clear additional headers scheduled for the next request.
+     *
+     * @return OminityApiClient
+     */
+    public function resetRequestHeaders()
+    {
+        $this->requestHeaders = [];
+
+        return $this;
+    }
+
+    /**
      * Perform a http call. This method is used by the resource specific classes. Please use the $payments property to
      * perform operations on payments.
      *
@@ -446,12 +515,14 @@ class OminityApiClient
         }
 
         $headers = $this->applyIdempotencyKey($headers, $httpMethod);
+        $headers = array_merge($headers, $this->requestHeaders);
 
-        $response = $this->httpClient->send($httpMethod, $url, $headers, $httpBody);
-
-        $this->resetIdempotencyKey();
-
-        return $response;
+        try {
+            return $this->httpClient->send($httpMethod, $url, $headers, $httpBody);
+        } finally {
+            $this->resetIdempotencyKey();
+            $this->resetRequestHeaders();
+        }
     }
 
     /**
@@ -484,6 +555,31 @@ class OminityApiClient
         unset($headers['Idempotency-Key']);
 
         return $headers;
+    }
+
+    /**
+     * @param array<string, string|null> $headers
+     * @return array<string, string>
+     */
+    private function normalizeRequestHeaders(array $headers)
+    {
+        $normalized = [];
+
+        foreach ($headers as $key => $value) {
+            $key = trim((string) $key);
+            if ($key === '' || $value === null) {
+                continue;
+            }
+
+            $value = trim((string) $value);
+            if ($value === '') {
+                continue;
+            }
+
+            $normalized[$key] = $value;
+        }
+
+        return $normalized;
     }
 
     /**

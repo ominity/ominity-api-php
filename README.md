@@ -33,6 +33,45 @@ $ominity->setApiKey("q48fd94qs98fd4sqf89fza9sqd89f4");
 
 With the `OminityApiClient` you can now access any of the following endpoints by selecting them as a property of the client:
 
+### Tracking events ###
+
+The PHP client now exposes the public tracking endpoint under `tracking->events`.
+
+```php
+$result = $ominity->tracking->events->track([
+    'event' => 'page_view',
+    'timestamp' => gmdate(DATE_ATOM),
+    'visitorId' => '648cd59e-8f79-40a7-a4de-1fb65b42c00c',
+    'url' => 'https://shop.example.com/products/lounge-chair',
+    'metadata' => [
+        'origin_resource' => [
+            'resource' => 'page',
+            'id' => 42,
+            'slug' => 'lounge-chair',
+        ],
+    ],
+]);
+
+$visitorId = $result->visitorId;
+```
+
+When proxying browser events through your own backend, you can preserve the real
+visitor IP and user agent on the next request:
+
+```php
+$ominity
+    ->addRequestHeaders([
+        'X-Forwarded-For' => '203.0.113.10',
+        'X-Real-IP' => '203.0.113.10',
+        'X-Ominity-Client-IP' => '203.0.113.10',
+        'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+    ])
+    ->tracking->events->track([
+        'event' => 'page_view',
+        'timestamp' => gmdate(DATE_ATOM),
+    ]);
+```
+
 ### Enabling debug mode ###
 
 When troubleshooting, it can be highly beneficial to have access to the submitted request within the `ApiException`. To safeguard against inadvertently exposing sensitive request data in your local application logs, the debugging feature is initially turned off.

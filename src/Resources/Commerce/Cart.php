@@ -27,7 +27,7 @@ class Cart extends BaseResource
      /**
      * Visitor ID of the cart.
      *
-     * @var int|null
+     * @var string|null
      */
     public $visitorId;
 

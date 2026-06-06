@@ -208,6 +208,49 @@ class OminityApiClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('application/json', $usedHeaders['Content-Type']);
     }
 
+    public function testAdditionalRequestHeadersAreAppliedToTheNextRequestOnly()
+    {
+        $response = new Response(200, [], '{"resource": "payment"}');
+        $fakeAdapter = new FakeHttpAdapter($response);
+
+        $apiClient = new OminityApiClient($fakeAdapter);
+        $apiClient->setApiKey('test_foobarfoobarfoobarfoobarfoobar');
+        $apiClient->setRequestHeaders([
+            'X-Forwarded-For' => '203.0.113.10, 10.0.0.1',
+            'X-Real-IP' => '203.0.113.10',
+        ]);
+
+        $apiClient->performHttpCallToFullUrl('POST', '', '{}');
+
+        $usedHeaders = $fakeAdapter->getUsedHeaders();
+        $this->assertEquals('203.0.113.10, 10.0.0.1', $usedHeaders['X-Forwarded-For']);
+        $this->assertEquals('203.0.113.10', $usedHeaders['X-Real-IP']);
+        $this->assertSame([], $apiClient->getRequestHeaders());
+    }
+
+    public function testTrackingEventEndpointReturnsTrackingEventResult()
+    {
+        $response = new Response(200, [], '{"success": true, "visitorId": "648cd59e-8f79-40a7-a4de-1fb65b42c00c"}');
+        $fakeAdapter = new FakeHttpAdapter($response);
+
+        $apiClient = new OminityApiClient($fakeAdapter);
+        $apiClient->setApiKey('test_foobarfoobarfoobarfoobarfoobar');
+
+        $result = $apiClient->tracking->events->track([
+            'event' => 'page_view',
+            'timestamp' => '2026-06-06T18:30:00Z',
+            'visitorId' => '648cd59e-8f79-40a7-a4de-1fb65b42c00c',
+            'url' => 'https://example.test/products/chair',
+        ]);
+
+        $this->assertTrue($result->success);
+        $this->assertEquals('648cd59e-8f79-40a7-a4de-1fb65b42c00c', $result->visitorId);
+        $this->assertStringEndsWith('/v1/tracking/events', $fakeAdapter->getUsedUrl());
+        $this->assertEquals('POST', $fakeAdapter->getUsedMethod());
+        $this->assertStringContainsString('"event":"page_view"', $fakeAdapter->getUsedBody());
+        $this->assertStringContainsString('"visitorId":"648cd59e-8f79-40a7-a4de-1fb65b42c00c"', $fakeAdapter->getUsedBody());
+    }
+
     /**
      * This test verifies that we do not add a Content-Type request header
      * if we do not send a BODY (skipping argument).

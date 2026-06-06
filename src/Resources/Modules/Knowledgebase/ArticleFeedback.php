@@ -38,7 +38,7 @@ class ArticleFeedback extends BaseResource
     /**
      * ID of the visitor who gave the feedback.
      *
-     * @var int|null
+     * @var string|null
      */
     public $visitorId;
 
